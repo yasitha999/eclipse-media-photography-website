@@ -293,12 +293,49 @@ const breadcrumb = {
   const label = form?.querySelector('[data-form-label]') as HTMLElement | null;
   const errorEl = form?.querySelector('[data-form-error]') as HTMLElement | null;
 
-  form?.addEventListener('submit', () => {
+  // Submit via fetch so we control the redirect (Web3Forms' native redirect
+  // field is unreliable on the free plan and occasionally lands on their
+  // own success page). We stay on the site the whole time.
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
     if (submitBtn && label) {
       submitBtn.disabled = true;
       label.textContent = 'Sending…';
     }
     if (errorEl) errorEl.hidden = true;
-    // Let the form submit normally — Web3Forms will redirect to /thank-you.
+
+    const formData = new FormData(form);
+    // Honeypot tripped → silently fail, act as if submitted.
+    if (formData.get('botcheck')) {
+      window.location.href = '/thank-you';
+      return;
+    }
+
+    try {
+      const payload = Object.fromEntries(formData.entries());
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.success) {
+        window.location.href = '/thank-you';
+        return;
+      }
+      throw new Error(data.message || 'Submission failed');
+    } catch (err) {
+      console.error('[contact form]', err);
+      if (errorEl) errorEl.hidden = false;
+      if (submitBtn && label) {
+        submitBtn.disabled = false;
+        label.textContent = 'Send Enquiry';
+      }
+    }
   });
 </script>
