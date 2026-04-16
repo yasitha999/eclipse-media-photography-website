@@ -22,16 +22,9 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
       <img
         src="/logo-dark.png"
         alt={site.name}
-        class="site-header__logo site-header__logo--dark"
-        width="140"
-        height="34"
-      />
-      <img
-        src="/logo-light.png"
-        alt={site.name}
-        class="site-header__logo site-header__logo--light"
-        width="140"
-        height="34"
+        class="site-header__logo"
+        width="1250"
+        height="232"
       />
     </a>
 
@@ -106,11 +99,20 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
   }
 
   .site-header__brand { grid-column: 1; display: inline-flex; align-items: center; }
-  .site-header__logo { height: 32px; width: auto; display: block; }
+  .site-header__logo {
+    height: 44px;
+    width: auto;
+    display: block;
+    transition: filter 280ms ease;
+  }
+  /* Over a dark hero, knock the black text + orange icon to solid white */
+  .site-header--transparent:not(.is-scrolled) .site-header__logo {
+    filter: brightness(0) invert(1);
+  }
 
-  .site-header__logo--light { display: none; }
-  .site-header--transparent:not(.is-scrolled) .site-header__logo--dark { display: none; }
-  .site-header--transparent:not(.is-scrolled) .site-header__logo--light { display: block; }
+  @media (max-width: 900px) {
+    .site-header__logo { height: 38px; }
+  }
 
   .site-header__nav {
     grid-column: 2;
