@@ -26,7 +26,21 @@
 - [x] 🧑 Cloudflare Pages connected to GitHub (auto-build on push)
 - [x] 🧑 Custom domain `eclipsemedia.au` attached to Pages project
 - [x] 🧑 Before DNS flip: full WordPress backup (export + DB) stored offsite
-- [ ] 🧑 Dump old GSC top-pages → spec 301s to Claude (GSC retains 16 mo of history; not urgent but do before Google re-crawls and drops the old URLs)
+- [x] 🧑 GSC audit: Manual Actions clean ✅, Security Issues clean ✅ — no penalty to claw back
+- [x] 💻 Old WP page content extracted → `res/old-site-reference/` (About, FAQ, Privacy, Terms reference copy)
+- [x] 💻 Legit old-URL 301s in `public/_redirects` (12 URLs mapped to their new homes)
+- [x] 🧑 Old WP site on Cloudways — safe to decommission once this commit is deployed
+- [ ] 🧑 Cloudways account deactivated (stop the bill)
+- [ ] 🧑 End-to-end smoke test on `*.pages.dev` preview (every page, form submission lands, thank-you redirect works)
+- [ ] 🧑 Verify each 301 on the live domain after deploy (curl or browser: `/about/`, `/contact/`, `/investment/`, `/portfolio/`, etc.)
+- [ ] 🧑 Lighthouse audit on live domain (target: Perf ≥ 95, SEO 100, A11y ≥ 95)
+
+> **Note on the old WP site**: it had been compromised and injected with
+> ~13,000 casino-affiliate spam URLs. We intentionally let those spam URLs
+> 404 on the new site — Google drops them from the index over time. GSC
+> was clean (no manual action), so there's no penalty to reverse, but
+> expect a temporary dip in total impressions as the casino queries fall
+> off. Real wedding-photography impressions should rebuild over 3–6 months.
 - [ ] 💻 Implement 301s from old WP URLs in `public/_redirects`
 - [ ] 🧑 End-to-end smoke test on `*.pages.dev` preview (every page, form submission lands, thank-you redirect works)
 - [ ] 🧑 DNS cutover: nameservers → Cloudflare, custom domain attached
@@ -112,9 +126,17 @@
 
 ### Standalone FAQ page
 
-- [ ] 💻 Move FAQ out of `/pricing` into `/faq` with richer answers
+- [ ] 💻 Move FAQ out of `/pricing` into `/faq` with richer answers (reference copy: `res/old-site-reference/faq.md` — 12 questions from the old site)
 - [ ] 💻 `FAQPage` JSON-LD remains; add more questions (delivery, backup, deposit, cancellation, unplugged ceremony, etc.)
 - [ ] 💻 Link from header, footer + from Pricing CTA row
+
+### Privacy + Terms pages (legal — required because `/contact` collects PII)
+
+- [ ] 💻 Build `/privacy` page (reference: `res/old-site-reference/privacy-policy.md`, needs domain cleanup + Australian Privacy Principles alignment)
+- [ ] 💻 Build `/terms` page (reference: `res/old-site-reference/terms-conditions.md` — old boilerplate is SaaS, not photography; needs a from-scratch rewrite covering retainer, cancellation, copyright, travel, etc.)
+- [ ] 💻 Update `public/_redirects` — swap the two TEMPORARY home-page redirects for direct mappings (`/privacy-policy/` → `/privacy`, `/terms-conditions/` → `/terms`)
+- [ ] 💻 Link both from the footer
+- [ ] 🧑 (Optional but wise) Legal review of both pages before publishing
 
 ### Lead magnet (email capture for couples not ready to enquire)
 

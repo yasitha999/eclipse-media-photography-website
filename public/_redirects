@@ -1,3 +1,33 @@
 # Cloudflare Pages redirects
-# Legacy /investment URL — page was renamed to /pricing.
-/investment    /pricing    301
+# Docs: https://developers.cloudflare.com/pages/configuration/redirects/
+# Format: <source>  <destination>  <status>
+
+# ---------------------------------------------------------------------------
+# Legacy WordPress URLs (pre-Astro rebuild).
+#
+# The old WP site had been compromised and was serving ~13,000 casino-
+# affiliate spam URLs alongside the 12 legitimate pages below. Google
+# Search Console showed no manual actions / security issues at decommission
+# time, so we let all the spam URLs 404 (Google drops them from the index
+# naturally) and 301-redirect only the real URLs to their new homes.
+#
+# Reference content extracted from the legitimate pages before shutdown
+# lives in res/old-site-reference/.
+# ---------------------------------------------------------------------------
+
+/about/                     /about        301
+/blog/                      /             301
+/contact/                   /contact      301
+/faq/                       /pricing#faq  301
+/portfolio/                 /weddings     301
+/portfolio/jenny-ron/       /weddings     301
+/portfolio/lydia-lucas/     /weddings     301
+/portfolio/maria-joel/      /weddings     301
+/portfolio/tylortroy/       /weddings     301
+/investment/                /pricing      301
+
+# Privacy + Terms — temporarily redirected to home until the new
+# Astro equivalents are published (see SEO-CHECKLIST §2). Update these
+# two lines once /privacy and /terms exist.
+/privacy-policy/            /             301
+/terms-conditions/          /             301
