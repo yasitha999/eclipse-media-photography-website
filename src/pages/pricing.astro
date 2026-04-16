@@ -202,20 +202,16 @@ const breadcrumb = {
     <div class="container-wide">
       <header class="video__header">
         <span class="eyebrow">Video add-on</span>
-        <h2 class="video__heading">Relive it, not just remember it.</h2>
-        <p class="video__lede">
-          Shot by a trusted second operator working alongside me, so the story stays consistent across both photo and film.
-          Add either option to any photography package.
-        </p>
+        <h2 class="video__heading">Add motion to the story.</h2>
       </header>
 
       <div class="video__grid">
         {videoAddons.map((v) => (
           <article class="video-card">
-            <div class="video-card__head">
+            <header class="video-card__head">
               <h3 class="video-card__name">{v.name}</h3>
               <p class="video-card__price">{v.price}</p>
-            </div>
+            </header>
             <p class="video-card__desc">{v.description}</p>
           </article>
         ))}
@@ -414,66 +410,59 @@ const breadcrumb = {
 
   /* ---------- VIDEO ADD-ONS ---------- */
   .video {
-    padding: 7rem 0;
-    background: var(--color-ink);
-    color: var(--color-paper);
+    padding: 5rem 0 6rem;
+    border-top: 1px solid var(--color-rule);
   }
   .video__header {
-    max-width: 42rem;
-    margin: 0 auto 4rem;
     text-align: center;
+    margin-bottom: 3.5rem;
   }
-  .video__header .eyebrow { color: var(--color-accent-soft); }
   .video__heading {
-    color: var(--color-paper);
-    margin: 1rem 0 1.25rem;
-  }
-  .video__lede {
-    color: rgba(250,247,242,0.78);
-    line-height: 1.65;
+    margin-top: 0.75rem;
   }
 
   .video__grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+    gap: 1.5rem;
   }
   .video-card {
     padding: 2.5rem 2.25rem;
-    border: 1px solid rgba(250,247,242,0.15);
-    background: rgba(250,247,242,0.03);
-    transition: border-color 250ms ease, background 250ms ease;
+    background: var(--color-paper);
+    border: 1px solid var(--color-rule);
+    transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
   }
   .video-card:hover {
-    border-color: rgba(218,169,107,0.55);
-    background: rgba(250,247,242,0.05);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+    border-color: var(--color-accent);
   }
   .video-card__head {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
     gap: 1.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(250,247,242,0.12);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-rule);
   }
   .video-card__name {
     font-family: var(--font-display);
     font-size: 1.75rem;
-    color: var(--color-paper);
+    color: var(--color-ink);
     margin: 0;
     line-height: 1.1;
   }
   .video-card__price {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    color: var(--color-accent-soft);
+    color: var(--color-accent);
     margin: 0;
     white-space: nowrap;
   }
   .video-card__desc {
     line-height: 1.65;
-    color: rgba(250,247,242,0.78);
+    color: var(--color-ink-soft);
     margin: 0;
   }
 
@@ -481,15 +470,15 @@ const breadcrumb = {
     text-align: center;
     margin-top: 3rem;
     font-size: 0.85rem;
-    color: rgba(250,247,242,0.55);
+    color: var(--color-muted);
     font-style: italic;
   }
 
   @media (max-width: 900px) {
-    .video { padding: 5rem 0; }
+    .video { padding: 4rem 0 5rem; }
     .video__grid { grid-template-columns: 1fr; gap: 1.5rem; }
     .video-card { padding: 2rem 1.5rem; }
-    .video-card__head { flex-direction: column; gap: 0.5rem; }
+    .video-card__head { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
   }
 
   /* ---------- QUOTE ---------- */
