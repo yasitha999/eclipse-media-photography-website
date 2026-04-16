@@ -118,4 +118,4 @@ Re-run only when refreshing the curated set.
 
 ---
 
-© Yasitha Waduge — Eclipse Media Photography
+© Yas — Eclipse Media Photography

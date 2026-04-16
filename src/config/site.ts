@@ -5,7 +5,7 @@
 export const site = {
   name: 'Eclipse Media',
   tagline: 'Melbourne Wedding Photography',
-  owner: 'Yasitha Waduge',
+  owner: 'Yas',
   url: 'https://eclipsemedia.au',
 
   email: 'info@eclipsemedia.au',
