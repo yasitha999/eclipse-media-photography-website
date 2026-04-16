@@ -91,6 +91,10 @@ Before going live, update `src/config/site.ts`:
 
 ### Roadmap (per plan §0 — MVP Launch Scope)
 
+**Operational checklist: [`SEO-CHECKLIST.md`](./SEO-CHECKLIST.md)** — full task list (on-site + off-site + recurring) for everything beyond the initial build.
+
+Next on-site build-outs:
+
 - About (full page)
 - 3 venue landing pages (`/venues/[slug]`)
 - 1–2 location pages (`/melbourne-wedding-photographer`, etc.)
