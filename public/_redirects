@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects
+# Legacy /investment URL — page was renamed to /pricing.
+/investment    /pricing    301

@@ -1,0 +1,649 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Testimonial from '@/components/Testimonial.astro';
+import { site } from '@/config/site';
+
+import heroImage from '@/assets/weddings/stacie-callum/07-portraits.jpg';
+
+type Tier = {
+  name: string;
+  hours: string;
+  price: string;
+  description: string;
+  highlight?: boolean;
+};
+
+const tiers: Tier[] = [
+  {
+    name: 'Essentials',
+    hours: '4 hours',
+    price: '$1,200',
+    description:
+      'Perfect for elopements or small celebrations. Four hours of unhurried, story-led coverage.',
+  },
+  {
+    name: 'Classic',
+    hours: '6 hours',
+    price: '$1,800',
+    description:
+      'Ideal for covering the ceremony through to the key reception moments — speeches, first dance, the good stuff.',
+  },
+  {
+    name: 'Signature',
+    hours: '8 hours',
+    price: '$2,400',
+    description:
+      'Full-day coverage from getting ready through to the reception — the collection most couples book.',
+    highlight: true,
+  },
+  {
+    name: 'Complete',
+    hours: '10 hours',
+    price: '$2,900',
+    description:
+      'Every minute of the day documented, from morning prep to the final dance on the floor.',
+  },
+];
+
+const included = [
+  'Unlimited high-resolution, professionally edited images',
+  'Private online gallery with print release',
+  'Sneak-peek highlights delivered within 24 hours',
+  'Full gallery delivered within 2 weeks',
+];
+
+type VideoAddon = {
+  name: string;
+  price: string;
+  description: string;
+  bullets: string[];
+};
+
+const videoAddons: VideoAddon[] = [
+  {
+    name: 'Wedding Highlights',
+    price: '$950',
+    description:
+      'A beautifully edited 3–5 minute documentary-style highlights film — the key moments, emotions, and atmosphere of your day in one watchable piece.',
+    bullets: [
+      '3–5 minute cinematic edit',
+      'Licensed music',
+      'Documentary-style storytelling',
+      'Delivered with your photo gallery',
+    ],
+  },
+  {
+    name: 'Complete Coverage',
+    price: '$1,750',
+    description:
+      'Everything in Highlights, plus full-length films of the ceremony, speeches, and first dance — perfect for reliving the whole celebration, not just the edit.',
+    bullets: [
+      '3–5 minute highlights film',
+      'Full ceremony film',
+      'Full speeches film',
+      'Full first dance + key reception moments',
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do you offer video?',
+    a: 'Yes — as an add-on to any photography package. You can choose a 3–5 minute Wedding Highlights film ($950) or Complete Coverage ($1,750), which bundles the highlights film with full-length films of the ceremony, speeches, and first dance. Standalone videography isn\'t offered — the magic is in photo and video being shot together, from the same point of view.',
+  },
+  {
+    q: 'Do you travel for weddings?',
+    a: `Yes — I'm based in ${site.addressLocality} and regularly photograph across ${site.addressRegion}, interstate, and overseas. Travel within 90 minutes of Melbourne is included; beyond that I provide a simple travel quote in your initial reply.`,
+  },
+  {
+    q: 'How do bookings work?',
+    a: 'A signed agreement plus a retainer secures your date. The remainder is due one month before the wedding. I take on a limited number of weddings each year, so earlier is better — many couples book 9–14 months out.',
+  },
+  {
+    q: 'When will we get our photos?',
+    a: 'A sneak-peek gallery lands in your inbox within 24 hours of the wedding — perfect for sharing while the day is still fresh. Your full gallery, professionally edited, is delivered within 2 weeks.',
+  },
+  {
+    q: 'Can we customise a package?',
+    a: 'Absolutely. Extra hours, additional locations, and engagement sessions can all be added to any collection — mention it in your enquiry and I\'ll put together a tailored quote.',
+  },
+  {
+    q: 'Is it really only you on the day?',
+    a: 'Yes. A single, consistent photographer gives the day a calmer footprint and a more unified set of images. When a second shooter is genuinely needed (very large guest counts, split getting-ready locations, same-day video), I can bring in a trusted colleague on request.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Pricing', item: `${site.url}/pricing` },
+  ],
+};
+---
+
+<BaseLayout
+  title="Pricing"
+  description={`Wedding photography collections from ${site.owner}, starting at ${site.priceFrom}. Four coverage lengths plus optional video add-ons. Based in Melbourne, shooting across ${site.addressRegion} and beyond.`}
+  jsonLd={[faqSchema, breadcrumb]}
+>
+  {/* ---------- HERO ---------- */}
+  <section class="price-hero">
+    <div class="price-hero__media">
+      <Image
+        src={heroImage}
+        alt=""
+        aria-hidden="true"
+        widths={[1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        quality={80}
+        format="webp"
+        class="price-hero__img"
+      />
+      <div class="price-hero__scrim"></div>
+    </div>
+
+    <div class="container-wide price-hero__content">
+      <span class="eyebrow price-hero__eyebrow">Pricing</span>
+      <h1 class="price-hero__title">
+        Timeless coverage,<br /><em>honestly priced.</em>
+      </h1>
+      <p class="price-hero__lede">
+        Four photography collections from {site.priceFrom}, each built around how much of the day you want documented.
+        Optional video add-ons captured alongside. No hidden upsells — what you see below is what you pay.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- PHOTOGRAPHY TIERS ---------- */}
+  <section class="tiers">
+    <div class="container-wide">
+      <header class="tiers__header">
+        <span class="eyebrow">Photography</span>
+        <h2 class="tiers__heading">Four ways to cover the day.</h2>
+      </header>
+
+      <div class="tiers__grid">
+        {tiers.map((t) => (
+          <article class:list={['tier', t.highlight && 'tier--highlight']}>
+            {t.highlight && <span class="tier__badge">Most Booked</span>}
+            <span class="eyebrow tier__eyebrow">{t.hours}</span>
+            <h3 class="tier__name">{t.name}</h3>
+            <p class="tier__price">{t.price}</p>
+            <p class="tier__desc">{t.description}</p>
+            <a href="/contact" class:list={['btn', !t.highlight && 'btn-ghost', 'tier__cta']}>
+              Enquire
+            </a>
+          </article>
+        ))}
+      </div>
+
+      {/* ---------- ALL PACKAGES INCLUDE ---------- */}
+      <div class="included">
+        <span class="eyebrow included__eyebrow">Every collection includes</span>
+        <ul class="included__list">
+          {included.map((item) => (
+            <li>
+              <svg class="included__tick" width="14" height="14" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M1 6l3.5 3.5L11 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <p class="tiers__note">
+        All prices are in AUD and include GST. Travel beyond 90 minutes of Melbourne quoted on enquiry.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- VIDEO ADD-ONS ---------- */}
+  <section class="video">
+    <div class="container-wide">
+      <header class="video__header">
+        <span class="eyebrow">Video add-on</span>
+        <h2 class="video__heading">Relive it, not just remember it.</h2>
+        <p class="video__lede">
+          Shot by a trusted second operator working alongside me, so the story stays consistent across both photo and film.
+          Add either option to any photography package.
+        </p>
+      </header>
+
+      <div class="video__grid">
+        {videoAddons.map((v) => (
+          <article class="video-card">
+            <div class="video-card__head">
+              <h3 class="video-card__name">{v.name}</h3>
+              <p class="video-card__price">{v.price}</p>
+            </div>
+            <p class="video-card__desc">{v.description}</p>
+            <ul class="video-card__list">
+              {v.bullets.map((b) => (
+                <li>
+                  <svg class="video-card__tick" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M1 6l3.5 3.5L11 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <p class="video__note">
+        Video add-ons are only available alongside a photography package — standalone videography isn't offered.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- TESTIMONIAL ---------- */}
+  <section class="price-quote">
+    <div class="container-wide">
+      <Testimonial
+        quote="Booking Yasitha was the easiest decision of the whole planning process. We'll look at these photos for the rest of our lives."
+        attribution="Anna & Bryan — Mornington Peninsula"
+      />
+    </div>
+  </section>
+
+  {/* ---------- FAQ ---------- */}
+  <section class="faq">
+    <div class="container-wide faq__grid">
+      <aside class="faq__side">
+        <span class="eyebrow">Common questions</span>
+        <h2 class="faq__heading">A few things couples ask.</h2>
+        <p>
+          Not here? Every enquiry gets a detailed reply with my full pricing guide attached —
+          ask me anything.
+        </p>
+        <a href="/contact" class="btn">Send an Enquiry</a>
+      </aside>
+
+      <div class="faq__items">
+        {faqs.map((f) => (
+          <details class="faq__item">
+            <summary>
+              <span>{f.q}</span>
+              <span class="faq__icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="faq__body">
+              <p>{f.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- CLOSE ---------- */}
+  <section class="price-close">
+    <div class="container-prose">
+      <span class="eyebrow">{site.availabilityMessage}</span>
+      <h2>Ready when you are.</h2>
+      <p>
+        Every enquiry gets a personal reply — usually within a few hours on weekdays — with my full pricing guide and current availability.
+      </p>
+      <a href="/contact" class="btn">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- HERO ---------- */
+  .price-hero {
+    position: relative;
+    padding-block: 12rem 7rem;
+    color: var(--color-paper);
+    overflow: hidden;
+  }
+  .price-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .price-hero__img { width: 100%; height: 100%; object-fit: cover; }
+  .price-hero__scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(20,18,16,0.72) 0%, rgba(20,18,16,0.55) 100%);
+  }
+  .price-hero__content { position: relative; z-index: 1; max-width: 48rem; }
+  .price-hero__eyebrow {
+    color: var(--color-accent-soft);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 0.45rem 0.9rem;
+    display: inline-block;
+  }
+  .price-hero__title {
+    color: var(--color-paper);
+    font-size: clamp(3rem, 7.5vw, 5.5rem);
+    margin: 1.5rem 0 1.5rem;
+    line-height: 1.05;
+  }
+  .price-hero__title em { font-style: italic; color: var(--color-accent-soft); }
+  .price-hero__lede {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: rgba(250,247,242,0.88);
+  }
+
+  /* ---------- TIERS ---------- */
+  .tiers { padding: 7rem 0 5rem; }
+  .tiers__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .tiers__heading {
+    margin-top: 0.75rem;
+    max-width: 22ch;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tiers__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  .tier {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5rem 1.75rem;
+    background: var(--color-paper);
+    border: 1px solid var(--color-rule);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+  .tier:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+  .tier--highlight {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .tier--highlight .eyebrow { color: var(--color-accent-soft); }
+  .tier--highlight .tier__desc { color: rgba(250,247,242,0.78); }
+
+  .tier__badge {
+    position: absolute;
+    top: -0.85rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent);
+    color: var(--color-paper);
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .tier__eyebrow { display: block; }
+  .tier__name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    margin: 0.75rem 0 0.25rem;
+    line-height: 1.1;
+    color: inherit;
+  }
+  .tier--highlight .tier__name { color: var(--color-paper); }
+  .tier__price {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-accent);
+    margin: 0 0 1.25rem;
+    line-height: 1;
+  }
+  .tier--highlight .tier__price { color: var(--color-accent-soft); }
+  .tier__desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+  .tier__cta { width: 100%; }
+  .tier--highlight .tier__cta {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .tier--highlight .tier__cta:hover {
+    background: var(--color-accent);
+    color: var(--color-paper);
+    border-color: var(--color-accent);
+  }
+
+  /* ---------- INCLUDED ---------- */
+  .included {
+    margin-top: 5rem;
+    padding: 3rem 2.5rem;
+    background: var(--color-paper-alt);
+    border: 1px solid var(--color-rule);
+  }
+  .included__eyebrow { display: block; margin-bottom: 1.25rem; }
+  .included__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 2.5rem;
+  }
+  .included__list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.9rem;
+    align-items: start;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+  .included__tick {
+    margin-top: 0.35rem;
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .tiers__note {
+    text-align: center;
+    margin-top: 2.5rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 1100px) {
+    .tiers__grid { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
+    .tier--highlight { order: -1; grid-column: span 2; }
+  }
+  @media (max-width: 640px) {
+    .tiers__grid { grid-template-columns: 1fr; }
+    .tier--highlight { grid-column: auto; }
+    .included { padding: 2rem 1.5rem; }
+    .included__list { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- VIDEO ADD-ONS ---------- */
+  .video {
+    padding: 7rem 0;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  .video__header {
+    max-width: 42rem;
+    margin: 0 auto 4rem;
+    text-align: center;
+  }
+  .video__header .eyebrow { color: var(--color-accent-soft); }
+  .video__heading {
+    color: var(--color-paper);
+    margin: 1rem 0 1.25rem;
+  }
+  .video__lede {
+    color: rgba(250,247,242,0.78);
+    line-height: 1.65;
+  }
+
+  .video__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  .video-card {
+    padding: 2.5rem 2.25rem;
+    border: 1px solid rgba(250,247,242,0.15);
+    background: rgba(250,247,242,0.03);
+    transition: border-color 250ms ease, background 250ms ease;
+  }
+  .video-card:hover {
+    border-color: rgba(218,169,107,0.55);
+    background: rgba(250,247,242,0.05);
+  }
+  .video-card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(250,247,242,0.12);
+  }
+  .video-card__name {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    color: var(--color-paper);
+    margin: 0;
+    line-height: 1.1;
+  }
+  .video-card__price {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-accent-soft);
+    margin: 0;
+    white-space: nowrap;
+  }
+  .video-card__desc {
+    line-height: 1.65;
+    color: rgba(250,247,242,0.78);
+    margin-bottom: 1.75rem;
+  }
+  .video-card__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .video-card__list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(250,247,242,0.88);
+  }
+  .video-card__tick {
+    margin-top: 0.4rem;
+    color: var(--color-accent-soft);
+    flex-shrink: 0;
+  }
+
+  .video__note {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: rgba(250,247,242,0.55);
+    font-style: italic;
+  }
+
+  @media (max-width: 900px) {
+    .video { padding: 5rem 0; }
+    .video__grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .video-card { padding: 2rem 1.5rem; }
+    .video-card__head { flex-direction: column; gap: 0.5rem; }
+  }
+
+  /* ---------- QUOTE ---------- */
+  .price-quote {
+    padding: 5rem 0;
+    background: var(--color-paper-alt);
+    border-block: 1px solid var(--color-rule);
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq { padding: 7rem 0; }
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .faq__heading { margin: 1rem 0 1.25rem; max-width: 16ch; }
+  .faq__side p {
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .faq__items { display: flex; flex-direction: column; gap: 0; }
+  .faq__item { border-bottom: 1px solid var(--color-rule); padding: 1.5rem 0; }
+  .faq__item:first-child { border-top: 1px solid var(--color-rule); }
+  .faq__item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--color-ink);
+    list-style: none;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-muted);
+    text-align: center;
+    transition: transform 240ms ease;
+  }
+  .faq__item[open] .faq__icon { transform: rotate(45deg); color: var(--color-accent); }
+  .faq__body {
+    padding-top: 1rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    .faq__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  /* ---------- CLOSE ---------- */
+  .price-close {
+    padding: 6rem 0 8rem;
+    text-align: center;
+  }
+  .price-close h2 { margin: 1rem 0 1.5rem; }
+  .price-close p {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+</style>

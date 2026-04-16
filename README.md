@@ -40,7 +40,7 @@ src/
 ├── pages/
 │   ├── index.astro          # Home
 │   ├── weddings/            # Portfolio index + individual stories
-│   ├── investment.astro     # Pricing (3 tiers + FAQ)
+│   ├── pricing.astro        # Pricing (4 photo tiers + video add-ons + FAQ)
 │   ├── contact.astro        # Web3Forms enquiry form
 │   ├── thank-you.astro
 │   └── 404.astro
@@ -85,7 +85,7 @@ Before going live, update `src/config/site.ts`:
 
 - Home
 - Portfolio (`/weddings`) + per-wedding story pages (`/weddings/[slug]`)
-- Investment (`/investment`)
+- Pricing (`/pricing`)
 - Contact (`/contact`) + Thank-you (`/thank-you`)
 - 404
 
