@@ -22,7 +22,15 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
       <img
         src="/logo-dark.png"
         alt={site.name}
-        class="site-header__logo"
+        class="site-header__logo site-header__logo--dark"
+        width="1250"
+        height="232"
+      />
+      <img
+        src="/logo-light.png"
+        alt=""
+        aria-hidden="true"
+        class="site-header__logo site-header__logo--light"
         width="1250"
         height="232"
       />
@@ -103,12 +111,15 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     height: 44px;
     width: auto;
     display: block;
-    transition: filter 280ms ease;
   }
-  /* Over a dark hero, knock the black text + orange icon to solid white */
-  .site-header--transparent:not(.is-scrolled) .site-header__logo {
-    filter: brightness(0) invert(1);
-  }
+
+  /* Default: show the dark-text (brand-coloured) logo. */
+  .site-header__logo--light { display: none; }
+
+  /* Over the dark hero only: swap in the light-text (still brand-coloured
+     icon + tagline, white ECLIPSE MEDIA text) variant so it stays readable. */
+  .site-header--transparent:not(.is-scrolled) .site-header__logo--dark { display: none; }
+  .site-header--transparent:not(.is-scrolled) .site-header__logo--light { display: block; }
 
   @media (max-width: 900px) {
     .site-header__logo { height: 38px; }
