@@ -8,10 +8,10 @@ export const site = {
   owner: 'Yasitha Waduge',
   url: 'https://eclipsemedia.au',
 
-  email: 'hello@eclipsemedia.au',
-  phone: '',
-  instagram: 'https://instagram.com/eclipsemediaphotography',
-  googleBusinessUrl: '',
+  email: 'info@eclipsemedia.au',
+  phone: '0489 228 444',
+  instagram: 'https://www.instagram.com/eclipse.media.photography/',
+  googleBusinessUrl: 'https://share.google/uOcKemqGjMp7o0Sfw',
 
   // Service area
   addressLocality: 'Melbourne',
@@ -24,7 +24,7 @@ export const site = {
   priceFrom: 'AUD $1,200',
 
   // Web3Forms — get an access key from https://web3forms.com (free)
-  web3formsAccessKey: 'YOUR_WEB3FORMS_ACCESS_KEY',
+  web3formsAccessKey: '303af9c3-ae54-4909-be95-50e0efadeed5',
 } as const;
 
 export const nav = [
