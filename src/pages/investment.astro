@@ -1,0 +1,445 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Testimonial from '@/components/Testimonial.astro';
+import { site } from '@/config/site';
+
+import heroImage from '@/assets/weddings/stacie-callum/07-portraits.jpg';
+
+type Tier = {
+  name: string;
+  eyebrow: string;
+  price: string;
+  description: string;
+  includes: string[];
+  highlight?: boolean;
+};
+
+const tiers: Tier[] = [
+  {
+    name: 'Intimate',
+    eyebrow: 'Elopements & micro-weddings',
+    price: 'From AUD $1,200',
+    description:
+      'For elopements, courthouse days, and small gatherings. Built for couples who want beautifully told, unhurried coverage without a full-day footprint.',
+    includes: [
+      'Up to 4 hours of coverage',
+      'One photographer — me, always',
+      'Pre-wedding planning call',
+      '250+ edited images in a private gallery',
+      'Online gallery with print release',
+      'Delivered in 4–6 weeks',
+    ],
+  },
+  {
+    name: 'Signature',
+    eyebrow: 'Most-booked collection',
+    price: 'From AUD $3,200',
+    description:
+      'A full-day experience for most weddings — from getting ready through the dance floor. The collection most couples choose.',
+    includes: [
+      '8 hours of continuous coverage',
+      'One photographer — me, always',
+      'Two planning calls (pre-wedding + timeline)',
+      '600+ edited images in a private gallery',
+      'Online gallery with print release',
+      'Complimentary engagement session',
+      'Delivered in 6–8 weeks',
+    ],
+    highlight: true,
+  },
+  {
+    name: 'Heirloom',
+    eyebrow: 'Multi-day & destination',
+    price: 'From AUD $5,400',
+    description:
+      'For multi-day celebrations, cultural ceremonies and destination weddings. Full documentation of every part of the day, delivered as an heirloom.',
+    includes: [
+      '10 hours of coverage (or two-day configurations)',
+      'Second photographer included',
+      'Unlimited planning calls',
+      '900+ edited images in a private gallery',
+      'Online gallery with print release',
+      'Complimentary engagement session',
+      'Heirloom fine-art wedding album (30 spreads)',
+      'Delivered in 8–10 weeks',
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: 'Do you travel for weddings?',
+    a: `Yes — I'm based in ${site.addressLocality} and regularly photograph across ${site.addressRegion}, as well as interstate and overseas. Travel within 90 minutes of Melbourne is included; beyond that I provide a simple travel quote in your initial reply.`,
+  },
+  {
+    q: 'Is it really only you on the day?',
+    a: 'Yes, on Intimate and Signature collections it is only me. I find a single, consistent photographer gives the day a calmer footprint and a more unified set of images. Heirloom includes a second shooter — useful for multi-day or very large celebrations.',
+  },
+  {
+    q: 'How do bookings work?',
+    a: 'A 25% retainer plus a signed agreement secures your date. The remainder is paid one month before the wedding. I take on a limited number of weddings each year, so earlier is better — many couples book 9–14 months out.',
+  },
+  {
+    q: 'When will we get our photos?',
+    a: 'A preview gallery of 20–30 images lands in your inbox within a week of the wedding. Full galleries are delivered in 6–8 weeks for Signature, 4–6 for Intimate, and 8–10 for Heirloom.',
+  },
+  {
+    q: 'Can we customise a package?',
+    a: 'Absolutely. Every wedding is different. Extra hours, engagement sessions, albums and second shooters can all be added to any collection — just mention it in your enquiry.',
+  },
+  {
+    q: 'Do you offer video?',
+    a: 'Not directly. I partner with a small handful of Melbourne videographers whose work I trust and can recommend during your enquiry call.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Investment', item: `${site.url}/investment` },
+  ],
+};
+---
+
+<BaseLayout
+  title="Investment"
+  description={`Wedding photography collections from ${site.owner}, starting at ${site.priceFrom}. Based in Melbourne, shooting across ${site.addressRegion} and beyond.`}
+  jsonLd={[faqSchema, breadcrumb]}
+>
+  {/* ---------- HERO ---------- */}
+  <section class="invest-hero">
+    <div class="invest-hero__media">
+      <Image
+        src={heroImage}
+        alt=""
+        aria-hidden="true"
+        widths={[1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        quality={80}
+        format="webp"
+        class="invest-hero__img"
+      />
+      <div class="invest-hero__scrim"></div>
+    </div>
+
+    <div class="container-wide invest-hero__content">
+      <span class="eyebrow invest-hero__eyebrow">Investment</span>
+      <h1 class="invest-hero__title">
+        Something for<br /><em>every kind of day.</em>
+      </h1>
+      <p class="invest-hero__lede">
+        Three considered collections from {site.priceFrom}. Each includes planning support, a private gallery, and every frame that matters — hand-edited and delivered in full.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- TIERS ---------- */}
+  <section class="tiers">
+    <div class="container-wide">
+      <div class="tiers__grid">
+        {tiers.map((t) => (
+          <article class:list={['tier', t.highlight && 'tier--highlight']}>
+            {t.highlight && <span class="tier__badge">Most Booked</span>}
+            <span class="eyebrow tier__eyebrow">{t.eyebrow}</span>
+            <h2 class="tier__name">{t.name}</h2>
+            <p class="tier__price">{t.price}</p>
+            <p class="tier__desc">{t.description}</p>
+            <ul class="tier__list">
+              {t.includes.map((inc) => (
+                <li>
+                  <svg class="tier__tick" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M1 6l3.5 3.5L11 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>{inc}</span>
+                </li>
+              ))}
+            </ul>
+            <a href="/contact" class:list={['btn', !t.highlight && 'btn-ghost', 'tier__cta']}>
+              Enquire · {t.name}
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <p class="tiers__note">
+        All prices are in AUD and include GST. Travel beyond 90 minutes of Melbourne quoted on enquiry.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- TESTIMONIAL ---------- */}
+  <section class="invest-quote">
+    <div class="container-wide">
+      <Testimonial
+        quote="The investment was the easiest decision we made in the whole planning process. We'll look at these photos for the rest of our lives."
+        attribution="Anna & Bryan — Mornington Peninsula"
+      />
+    </div>
+  </section>
+
+  {/* ---------- FAQ ---------- */}
+  <section class="faq">
+    <div class="container-wide faq__grid">
+      <aside class="faq__side">
+        <span class="eyebrow">Common questions</span>
+        <h2 class="faq__heading">A few things couples ask.</h2>
+        <p>
+          Not here? Every enquiry gets a detailed reply with my full pricing guide attached —
+          ask me anything.
+        </p>
+        <a href="/contact" class="btn">Send an Enquiry</a>
+      </aside>
+
+      <div class="faq__items">
+        {faqs.map((f) => (
+          <details class="faq__item">
+            <summary>
+              <span>{f.q}</span>
+              <span class="faq__icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="faq__body">
+              <p>{f.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* ---------- CLOSE ---------- */}
+  <section class="invest-close">
+    <div class="container-prose">
+      <span class="eyebrow">{site.availabilityMessage}</span>
+      <h2>Ready when you are.</h2>
+      <p>
+        Every enquiry gets a personal reply — usually within a few hours on weekdays — with a detailed pricing guide and my current availability.
+      </p>
+      <a href="/contact" class="btn">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- HERO ---------- */
+  .invest-hero {
+    position: relative;
+    padding-block: 12rem 7rem;
+    color: var(--color-paper);
+    overflow: hidden;
+  }
+  .invest-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .invest-hero__img { width: 100%; height: 100%; object-fit: cover; }
+  .invest-hero__scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(20,18,16,0.72) 0%, rgba(20,18,16,0.55) 100%);
+  }
+  .invest-hero__content { position: relative; z-index: 1; max-width: 46rem; }
+  .invest-hero__eyebrow {
+    color: var(--color-accent-soft);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 0.45rem 0.9rem;
+    display: inline-block;
+  }
+  .invest-hero__title {
+    color: var(--color-paper);
+    font-size: clamp(3rem, 8vw, 6rem);
+    margin: 1.5rem 0 1.5rem;
+  }
+  .invest-hero__title em { font-style: italic; color: var(--color-accent-soft); }
+  .invest-hero__lede {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(250,247,242,0.88);
+  }
+
+  /* ---------- TIERS ---------- */
+  .tiers { padding: 6rem 0; }
+  .tiers__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .tier {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2.75rem 2.25rem;
+    background: var(--color-paper);
+    border: 1px solid var(--color-rule);
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+  .tier:hover { transform: translateY(-4px); box-shadow: var(--shadow-soft); }
+  .tier--highlight {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  .tier--highlight .eyebrow { color: var(--color-accent-soft); }
+  .tier--highlight .tier__desc { color: rgba(250,247,242,0.78); }
+  .tier--highlight .tier__list li { color: rgba(250,247,242,0.88); }
+  .tier--highlight .tier__tick { color: var(--color-accent-soft); }
+
+  .tier__badge {
+    position: absolute;
+    top: -0.85rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-accent);
+    color: var(--color-paper);
+    padding: 0.3rem 0.9rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .tier__eyebrow { display: block; }
+  .tier__name {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    margin: 0.75rem 0 0.25rem;
+    color: inherit;
+  }
+  .tier--highlight .tier__name { color: var(--color-paper); }
+  .tier__price {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+  }
+  .tier--highlight .tier__price { color: var(--color-accent-soft); }
+  .tier__desc {
+    line-height: 1.65;
+    color: var(--color-ink-soft);
+    margin-bottom: 2rem;
+  }
+  .tier__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    flex: 1;
+  }
+  .tier__list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-ink-soft);
+  }
+  .tier__tick {
+    margin-top: 0.4rem;
+    color: var(--color-accent);
+  }
+  .tier__cta { width: 100%; }
+  .tier--highlight .tier__cta {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .tier--highlight .tier__cta:hover {
+    background: var(--color-accent);
+    color: var(--color-paper);
+    border-color: var(--color-accent);
+  }
+
+  .tiers__note {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  @media (max-width: 960px) {
+    .tiers__grid { grid-template-columns: 1fr; gap: 2rem; }
+    .tier--highlight { order: -1; }
+  }
+
+  /* ---------- QUOTE ---------- */
+  .invest-quote {
+    padding: 5rem 0;
+    background: var(--color-paper-alt);
+    border-block: 1px solid var(--color-rule);
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq { padding: 7rem 0; }
+  .faq__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .faq__heading { margin: 1rem 0 1.25rem; max-width: 16ch; }
+  .faq__side p {
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .faq__items { display: flex; flex-direction: column; gap: 0; }
+  .faq__item { border-bottom: 1px solid var(--color-rule); padding: 1.5rem 0; }
+  .faq__item:first-child { border-top: 1px solid var(--color-rule); }
+  .faq__item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--color-ink);
+    list-style: none;
+  }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-muted);
+    text-align: center;
+    transition: transform 240ms ease;
+  }
+  .faq__item[open] .faq__icon { transform: rotate(45deg); color: var(--color-accent); }
+  .faq__body {
+    padding-top: 1rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    .faq__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  /* ---------- CLOSE ---------- */
+  .invest-close {
+    padding: 6rem 0 8rem;
+    text-align: center;
+  }
+  .invest-close h2 { margin: 1rem 0 1.5rem; }
+  .invest-close p {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+</style>

@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'weddings'>;
+  size?: 'default' | 'large';
+  eager?: boolean;
+}
+
+const { entry, size = 'default', eager = false } = Astro.props;
+const { coupleNames, venue, location, heroImage, heroAlt, weddingDate } = entry.data;
+const year = weddingDate.getFullYear();
+const href = `/weddings/${entry.id}`;
+---
+
+<a href={href} class:list={['wedding-card', `wedding-card--${size}`]} aria-label={`${coupleNames} — ${venue}`}>
+  <div class="wedding-card__media">
+    <Image
+      src={heroImage}
+      alt={heroAlt}
+      widths={size === 'large' ? [800, 1200, 1800] : [600, 900, 1200]}
+      sizes={size === 'large' ? '(min-width: 900px) 66vw, 100vw' : '(min-width: 900px) 33vw, 100vw'}
+      loading={eager ? 'eager' : 'lazy'}
+      fetchpriority={eager ? 'high' : 'auto'}
+      class="wedding-card__img"
+      quality={78}
+      format="webp"
+    />
+    <div class="wedding-card__overlay"></div>
+  </div>
+  <div class="wedding-card__body">
+    <span class="eyebrow wedding-card__meta">{venue} · {location} · {year}</span>
+    <h3 class="wedding-card__title">{coupleNames}</h3>
+    <span class="wedding-card__cta">View the story →</span>
+  </div>
+</a>
+
+<style>
+  .wedding-card {
+    display: block;
+    color: var(--color-ink);
+    transition: color 240ms ease;
+  }
+
+  .wedding-card__media {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--color-paper-alt);
+  }
+
+  .wedding-card--large .wedding-card__media { aspect-ratio: 3 / 2; }
+
+  .wedding-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .wedding-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(20, 18, 16, 0.45) 0%, transparent 40%);
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .wedding-card:hover .wedding-card__img { transform: scale(1.03); }
+  .wedding-card:hover .wedding-card__overlay { opacity: 1; }
+
+  .wedding-card__body {
+    padding-top: 1.25rem;
+  }
+
+  .wedding-card__meta {
+    display: block;
+    color: var(--color-muted);
+  }
+
+  .wedding-card__title {
+    font-size: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+    margin-top: 0.5rem;
+  }
+
+  .wedding-card__cta {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    transition: color 240ms ease, transform 240ms ease;
+  }
+
+  .wedding-card:hover .wedding-card__cta {
+    color: var(--color-accent);
+    transform: translateX(4px);
+  }
+</style>

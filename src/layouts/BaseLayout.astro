@@ -1,0 +1,66 @@
+---
+import '@/styles/global.css';
+import SEO from '@/components/SEO.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import StickyCTA from '@/components/StickyCTA.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  pathname?: string;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, any>[];
+  transparentHeader?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  pathname,
+  type,
+  jsonLd,
+  transparentHeader = false,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      pathname={pathname}
+      type={type}
+      jsonLd={jsonLd}
+      noindex={noindex}
+    />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header transparent={transparentHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <StickyCTA />
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 8px;
+        z-index: 100;
+        background: var(--color-ink);
+        color: var(--color-paper);
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+      .skip-link:focus { left: 8px; }
+    </style>
+  </body>
+</html>

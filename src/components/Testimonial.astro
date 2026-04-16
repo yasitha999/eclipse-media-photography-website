@@ -1,0 +1,47 @@
+---
+interface Props {
+  quote: string;
+  attribution: string;
+  variant?: 'default' | 'light';
+}
+
+const { quote, attribution, variant = 'default' } = Astro.props;
+---
+
+<figure class:list={['testimonial', `testimonial--${variant}`]}>
+  <span class="testimonial__mark" aria-hidden="true">&ldquo;</span>
+  <blockquote class="testimonial__quote">
+    <p>{quote}</p>
+  </blockquote>
+  <figcaption class="testimonial__caption eyebrow">— {attribution}</figcaption>
+</figure>
+
+<style>
+  .testimonial {
+    max-width: 42rem;
+    margin-inline: auto;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .testimonial__mark {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 5rem;
+    line-height: 0.5;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+  }
+  .testimonial__quote p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.35rem, 1.5vw + 1rem, 1.85rem);
+    line-height: 1.35;
+    color: var(--color-ink);
+  }
+  .testimonial__caption {
+    margin-top: 1.5rem;
+    color: var(--color-muted);
+  }
+  .testimonial--light .testimonial__quote p { color: var(--color-paper); }
+  .testimonial--light .testimonial__caption { color: var(--color-accent-soft); }
+</style>

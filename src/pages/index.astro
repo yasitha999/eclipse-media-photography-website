@@ -1,0 +1,483 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProofStrip from '@/components/ProofStrip.astro';
+import WeddingCard from '@/components/WeddingCard.astro';
+import Testimonial from '@/components/Testimonial.astro';
+import { site } from '@/config/site';
+
+import heroImage from '@/assets/home/hero.jpg';
+import featured1 from '@/assets/home/featured-1.jpg';
+import featured2 from '@/assets/home/featured-2.jpg';
+import featured3 from '@/assets/home/featured-3.jpg';
+
+const weddings = (await getCollection('weddings', ({ data }) => !data.draft))
+  .filter((w) => w.data.featured)
+  .sort((a, b) => b.data.weddingDate.valueOf() - a.data.weddingDate.valueOf());
+
+const featuredWeddings = weddings.slice(0, 4);
+
+// FAQPage + BlogPage schema is added on sub-pages; Home is just WebSite + LocalBusiness.
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  url: site.url,
+  name: site.name,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${site.url}/weddings`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<BaseLayout
+  title={`${site.tagline}`}
+  description={`${site.owner} — Melbourne & Yarra Valley wedding photographer. Story-driven, documentary wedding photography across Victoria and Australia. ${site.availabilityMessage}.`}
+  transparentHeader={true}
+  jsonLd={[websiteSchema]}
+>
+  {/* ---------------- HERO ---------------- */}
+  <section class="hero">
+    <div class="hero__media">
+      <Image
+        src={heroImage}
+        alt="Couple sharing a moment in the Yarra Valley at sunset"
+        widths={[800, 1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        quality={80}
+        format="webp"
+        class="hero__img"
+      />
+      <div class="hero__scrim"></div>
+    </div>
+
+    <div class="hero__content container-wide">
+      <span class="eyebrow hero__eyebrow">{site.availabilityMessage}</span>
+      <h1 class="hero__title">
+        Wedding stories,<br />
+        <em>quietly told.</em>
+      </h1>
+      <p class="hero__lede">
+        {site.owner} — Melbourne wedding photographer documenting the in-between moments across the Yarra Valley, Mornington Peninsula and beyond.
+      </p>
+      <div class="hero__ctas">
+        <a href="/weddings" class="btn btn-light">See Recent Weddings</a>
+        <a href="/contact" class="btn btn-ghost hero__ghost">Check Availability →</a>
+      </div>
+    </div>
+
+    <a href="#intro" class="hero__scroll" aria-label="Scroll to content">
+      <span></span>
+    </a>
+  </section>
+
+  {/* ---------------- INTRO ---------------- */}
+  <section id="intro" class="intro">
+    <div class="container-wide intro__grid">
+      <div class="intro__col">
+        <span class="eyebrow">A note from Yasitha</span>
+        <h2 class="intro__heading">
+          Photography that feels like the day,<br />not just looks like it.
+        </h2>
+      </div>
+      <div class="intro__col intro__col--prose">
+        <p>
+          I'm a Melbourne-based wedding photographer drawn to the quieter half of a wedding day —
+          the glance before the ceremony, your Dad wiping his eyes during the speech, the last
+          song when the dance floor is half-empty and somehow the best it's been all night.
+        </p>
+        <p>
+          My approach is warm, unhurried and documentary. I direct lightly when we need a portrait,
+          and disappear completely the rest of the time. Ten years in, with over 200 weddings
+          across Victoria, I'm still quietly obsessed with telling a day as it actually felt.
+        </p>
+        <a href="/about" class="intro__link">More about me →</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- PROOF ---------------- */}
+  <ProofStrip />
+
+  {/* ---------------- FEATURED WEDDINGS ---------------- */}
+  <section class="featured">
+    <div class="container-wide">
+      <header class="featured__header">
+        <span class="eyebrow">Recent Weddings</span>
+        <h2>Selected stories</h2>
+        <p class="featured__lede">
+          Four recent celebrations from across Victoria — each told in full on its own page.
+        </p>
+      </header>
+
+      <div class="featured__grid">
+        {featuredWeddings.map((wedding, i) => (
+          <WeddingCard entry={wedding} size={i === 0 ? 'large' : 'default'} eager={i === 0} />
+        ))}
+      </div>
+
+      <div class="featured__cta">
+        <a href="/weddings" class="btn btn-ghost">View All Weddings</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- TESTIMONIAL ---------------- */}
+  <section class="testimonial-band">
+    <div class="testimonial-band__bg">
+      <Image
+        src={featured2}
+        alt=""
+        aria-hidden="true"
+        widths={[1200, 1800, 2400]}
+        sizes="100vw"
+        loading="lazy"
+        quality={70}
+        format="webp"
+        class="testimonial-band__img"
+      />
+    </div>
+    <div class="container-wide testimonial-band__content">
+      <Testimonial
+        quote="Yasitha felt like a friend from the moment we met. The photos capture exactly how the day felt — full of love, laughter, and the people we love most."
+        attribution="Stacie & Callum"
+        variant="light"
+      />
+    </div>
+  </section>
+
+  {/* ---------------- EDITORIAL SPLIT ---------------- */}
+  <section class="split">
+    <div class="container-wide split__grid">
+      <div class="split__media">
+        <Image
+          src={featured1}
+          alt="Quiet wedding moment in Melbourne"
+          widths={[600, 900, 1200]}
+          sizes="(min-width: 900px) 45vw, 100vw"
+          loading="lazy"
+          quality={78}
+          format="webp"
+        />
+      </div>
+      <div class="split__content">
+        <span class="eyebrow">How it works</span>
+        <h2>Simple, transparent, unhurried.</h2>
+        <ol class="split__steps">
+          <li>
+            <strong>Reach out.</strong> Tell me a little about your day and I'll respond within a few hours with availability and a full pricing guide.
+          </li>
+          <li>
+            <strong>Let's meet.</strong> A 15-minute call or coffee — no pressure, no hard sell. Just a chance to see if we click.
+          </li>
+          <li>
+            <strong>Book your date.</strong> A small deposit secures the day. From there, I'm in your corner until final delivery.
+          </li>
+          <li>
+            <strong>Tell your story.</strong> Expect your full gallery in 6–8 weeks, along with a hand-picked highlight reel you'll actually want to share.
+          </li>
+        </ol>
+        <a href="/contact" class="btn">Start the Conversation</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ---------------- BIG CTA ---------------- */}
+  <section class="big-cta">
+    <div class="big-cta__bg">
+      <Image
+        src={featured3}
+        alt=""
+        aria-hidden="true"
+        widths={[1200, 1800, 2400]}
+        sizes="100vw"
+        loading="lazy"
+        quality={70}
+        format="webp"
+        class="big-cta__img"
+      />
+    </div>
+    <div class="container-wide big-cta__content">
+      <span class="eyebrow big-cta__eyebrow">{site.availabilityMessage}</span>
+      <h2 class="big-cta__heading">Your day, told honestly.</h2>
+      <p class="big-cta__lede">
+        Only a limited number of weddings taken each year. I'd love to hear about yours.
+      </p>
+      <a href="/contact" class="btn btn-light">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------------- HERO ---------------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100svh;
+    color: var(--color-paper);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(20,18,16,0.45) 0%, rgba(20,18,16,0.15) 30%, rgba(20,18,16,0.65) 100%);
+  }
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 7rem;
+    padding-top: 10rem;
+    max-width: 900px;
+  }
+  .hero__eyebrow {
+    color: var(--color-accent-soft);
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 0.45rem 0.9rem;
+  }
+  .hero__title {
+    color: var(--color-paper);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.98;
+    margin: 0;
+  }
+  .hero__title em {
+    font-style: italic;
+    color: var(--color-accent-soft);
+  }
+  .hero__lede {
+    max-width: 42rem;
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: rgba(250,247,242,0.88);
+  }
+  .hero__ctas {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .hero__ghost {
+    color: var(--color-paper);
+    border-color: rgba(255,255,255,0.5);
+    background: transparent;
+  }
+  .hero__ghost:hover {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    bottom: 1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    width: 22px;
+    height: 38px;
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 12px;
+  }
+  .hero__scroll span {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    width: 2px;
+    height: 8px;
+    background: var(--color-paper);
+    border-radius: 2px;
+    transform: translateX(-50%);
+    animation: scroll-dot 1.8s infinite;
+  }
+  @keyframes scroll-dot {
+    0% { transform: translate(-50%, 0); opacity: 1; }
+    100% { transform: translate(-50%, 14px); opacity: 0; }
+  }
+
+  /* ---------------- INTRO ---------------- */
+  .intro { padding: 7rem 0 6rem; }
+  .intro__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .intro__heading {
+    margin-top: 1.25rem;
+    max-width: 20ch;
+  }
+  .intro__col--prose p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+    margin-bottom: 1.25rem;
+  }
+  .intro__link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 820px) {
+    .intro__grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  /* ---------------- FEATURED ---------------- */
+  .featured { padding: 7rem 0; }
+  .featured__header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .featured__header h2 { margin-top: 0.5rem; }
+  .featured__lede {
+    max-width: 42rem;
+    margin: 1rem auto 0;
+    color: var(--color-muted);
+  }
+  .featured__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3rem 2rem;
+  }
+  .featured__grid > :global(a:nth-child(1)) { grid-column: span 6; }
+  .featured__grid > :global(a:nth-child(n+2)) { grid-column: span 2; }
+  .featured__cta { text-align: center; margin-top: 4rem; }
+
+  @media (max-width: 900px) {
+    .featured__grid { grid-template-columns: repeat(2, 1fr); }
+    .featured__grid > :global(a:nth-child(1)) { grid-column: span 2; }
+    .featured__grid > :global(a:nth-child(n+2)) { grid-column: span 1; }
+  }
+  @media (max-width: 560px) {
+    .featured__grid { grid-template-columns: 1fr; }
+    .featured__grid > :global(a:nth-child(1)),
+    .featured__grid > :global(a:nth-child(n+2)) { grid-column: span 1; }
+  }
+
+  /* ---------------- TESTIMONIAL BAND ---------------- */
+  .testimonial-band {
+    position: relative;
+    padding: 9rem 0;
+    overflow: hidden;
+    color: var(--color-paper);
+  }
+  .testimonial-band__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .testimonial-band__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+  }
+  .testimonial-band__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------------- SPLIT ---------------- */
+  .split { padding: 7rem 0; }
+  .split__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .split__media img { width: 100%; height: auto; aspect-ratio: 4/5; object-fit: cover; }
+  .split__content h2 { margin-top: 0.75rem; margin-bottom: 2rem; max-width: 15ch; }
+  .split__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2.5rem 0;
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .split__steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-rule);
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+  }
+  .split__steps li::before {
+    content: '0' counter(step);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    color: var(--color-accent);
+  }
+  .split__steps strong {
+    display: block;
+    font-weight: 500;
+    color: var(--color-ink);
+    margin-bottom: 0.2rem;
+  }
+
+  @media (max-width: 820px) {
+    .split__grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  /* ---------------- BIG CTA ---------------- */
+  .big-cta {
+    position: relative;
+    padding: 9rem 0;
+    overflow: hidden;
+    color: var(--color-paper);
+    text-align: center;
+  }
+  .big-cta__bg { position: absolute; inset: 0; z-index: 0; }
+  .big-cta__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.45);
+  }
+  .big-cta__content { position: relative; z-index: 1; }
+  .big-cta__eyebrow {
+    color: var(--color-accent-soft);
+    display: inline-block;
+    margin-bottom: 1.25rem;
+  }
+  .big-cta__heading {
+    color: var(--color-paper);
+    font-size: clamp(2.25rem, 5vw, 4.5rem);
+    margin-bottom: 1.25rem;
+  }
+  .big-cta__lede {
+    max-width: 42rem;
+    margin: 0 auto 2.5rem;
+    color: rgba(250,247,242,0.85);
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+</style>

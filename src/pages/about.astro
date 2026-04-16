@@ -1,0 +1,40 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+---
+
+<BaseLayout
+  title="About"
+  description={`About ${site.owner} — Melbourne wedding photographer.`}
+>
+  <section class="about-placeholder">
+    <div class="container-prose">
+      <span class="eyebrow">About · Coming soon</span>
+      <h1>About Yasitha</h1>
+      <p>
+        A proper About page is on its way — bio, approach, gear, and the reasons I started
+        photographing weddings. In the meantime, you can see my most recent work under
+        <a href="/weddings">Weddings</a> or reach out anytime via <a href="/contact">Contact</a>.
+      </p>
+      <a href="/contact" class="btn">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-placeholder {
+    padding: 12rem 0 8rem;
+    text-align: center;
+  }
+  .about-placeholder h1 {
+    margin: 1rem 0 1.5rem;
+  }
+  .about-placeholder p {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .about-placeholder a { color: var(--color-accent); text-decoration: underline; }
+  .about-placeholder .btn { text-decoration: none; color: var(--color-paper); }
+</style>

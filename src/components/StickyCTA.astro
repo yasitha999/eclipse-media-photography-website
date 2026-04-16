@@ -1,0 +1,64 @@
+---
+import { site } from '@/config/site';
+---
+
+<!--
+  Mobile-only sticky CTA. Appears after the user scrolls past the hero so it
+  doesn't obstruct first impressions. Hidden on /contact to avoid redundancy.
+-->
+<a href="/contact" class="sticky-cta" data-sticky-cta aria-label="Check wedding availability">
+  <span class="sticky-cta__label">Check Availability</span>
+  <span class="sticky-cta__note">{site.availabilityMessage}</span>
+</a>
+
+<style>
+  .sticky-cta {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .sticky-cta {
+      position: fixed;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      padding: 0.9rem 1.25rem;
+      background: var(--color-ink);
+      color: var(--color-paper);
+      border-radius: 999px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.28);
+      transform: translateY(120%);
+      transition: transform 400ms ease;
+    }
+    .sticky-cta.is-visible { transform: translateY(0); }
+    .sticky-cta__label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: var(--tracking-nav);
+      text-transform: uppercase;
+    }
+    .sticky-cta__note {
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--color-accent-soft);
+    }
+  }
+</style>
+
+<script>
+  const cta = document.querySelector('[data-sticky-cta]') as HTMLElement | null;
+  if (cta && !location.pathname.endsWith('/contact')) {
+    const onScroll = () => {
+      if (window.scrollY > 600) cta.classList.add('is-visible');
+      else cta.classList.remove('is-visible');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  } else {
+    cta?.remove();
+  }
+</script>

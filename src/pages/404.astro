@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found"
+  description="The page you're looking for doesn't exist."
+  noindex={true}
+>
+  <section class="nf">
+    <div class="container-prose">
+      <span class="eyebrow">404</span>
+      <h1 class="nf__title">This page has slipped away.</h1>
+      <p class="nf__lede">
+        The link might be broken or the page moved. Let's get you back to the good stuff.
+      </p>
+      <div class="nf__ctas">
+        <a href="/" class="btn">Return Home</a>
+        <a href="/weddings" class="btn btn-ghost">See Weddings</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    padding: 12rem 0 10rem;
+    text-align: center;
+  }
+  .nf__title { margin: 1rem 0 1.5rem; }
+  .nf__lede {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+  .nf__ctas { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+</style>

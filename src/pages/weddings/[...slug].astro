@@ -1,0 +1,358 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Testimonial from '@/components/Testimonial.astro';
+import WeddingCard from '@/components/WeddingCard.astro';
+import { site } from '@/config/site';
+
+export async function getStaticPaths() {
+  const weddings = await getCollection('weddings', ({ data }) => !data.draft);
+  return weddings.map((wedding) => ({
+    params: { slug: wedding.id },
+    props: { wedding },
+  }));
+}
+
+const { wedding } = Astro.props;
+const { Content } = await render(wedding);
+const {
+  coupleNames,
+  venue,
+  venueSlug,
+  location,
+  weddingDate,
+  heroImage,
+  heroAlt,
+  gallery,
+  summary,
+  vendors,
+  testimonial,
+} = wedding.data;
+
+const formattedDate = weddingDate.toLocaleDateString('en-AU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+// Related weddings (up to 3 excluding this one)
+const allWeddings = await getCollection('weddings', ({ data }) => !data.draft);
+const related = allWeddings
+  .filter((w) => w.id !== wedding.id)
+  .sort((a, b) => b.data.weddingDate.valueOf() - a.data.weddingDate.valueOf())
+  .slice(0, 3);
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: `${coupleNames} — ${venue}, ${location}`,
+  description: summary,
+  author: { '@type': 'Person', name: site.owner },
+  publisher: { '@type': 'Organization', name: site.name },
+  datePublished: weddingDate.toISOString(),
+  mainEntityOfPage: `${site.url}/weddings/${wedding.id}`,
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Weddings', item: `${site.url}/weddings` },
+    { '@type': 'ListItem', position: 3, name: coupleNames, item: `${site.url}/weddings/${wedding.id}` },
+  ],
+};
+---
+
+<BaseLayout
+  title={`${coupleNames} · ${venue}, ${location}`}
+  description={summary}
+  type="article"
+  jsonLd={[articleSchema, breadcrumb]}
+>
+  {/* --- HERO --- */}
+  <section class="story-hero">
+    <div class="story-hero__media">
+      <Image
+        src={heroImage}
+        alt={heroAlt}
+        widths={[800, 1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        quality={82}
+        format="webp"
+        class="story-hero__img"
+      />
+      <div class="story-hero__scrim"></div>
+    </div>
+    <div class="container-wide story-hero__content">
+      <span class="eyebrow story-hero__meta">
+        {venue}{venueSlug ? '' : ''} · {location} · {formattedDate}
+      </span>
+      <h1 class="story-hero__title">{coupleNames}</h1>
+      <p class="story-hero__summary">{summary}</p>
+    </div>
+  </section>
+
+  {/* --- INTRO STORY --- */}
+  <section class="story-prose">
+    <div class="container-prose">
+      <article class="prose">
+        <Content />
+      </article>
+    </div>
+  </section>
+
+  {/* --- GALLERY --- */}
+  <section class="story-gallery">
+    <div class="container-wide">
+      <header class="story-gallery__header">
+        <span class="rule"></span>
+        <span class="eyebrow">The day in photographs</span>
+      </header>
+      <div class="story-gallery__grid">
+        {gallery.map((img, i) => (
+          <figure class:list={['story-gallery__item', i % 4 === 0 && 'story-gallery__item--wide']}>
+            <Image
+              src={img.src}
+              alt={img.alt}
+              widths={[600, 900, 1200, 1600]}
+              sizes="(min-width: 1100px) 48vw, (min-width: 700px) 48vw, 92vw"
+              loading="lazy"
+              quality={78}
+              format="webp"
+            />
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {/* --- TESTIMONIAL --- */}
+  {testimonial && (
+    <section class="story-quote">
+      <div class="container-wide">
+        <Testimonial quote={testimonial.quote} attribution={testimonial.attribution} />
+      </div>
+    </section>
+  )}
+
+  {/* --- VENDORS --- */}
+  {vendors.length > 0 && (
+    <section class="story-vendors">
+      <div class="container-prose">
+        <span class="eyebrow">A note of thanks · The team</span>
+        <h3>Vendors behind the day</h3>
+        <dl class="story-vendors__list">
+          {vendors.map((v) => (
+            <div class="story-vendors__row">
+              <dt>{v.role}</dt>
+              <dd>
+                {v.url ? (
+                  <a href={v.url} target="_blank" rel="noopener">{v.name}</a>
+                ) : v.name}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  )}
+
+  {/* --- CTA --- */}
+  <section class="story-cta">
+    <div class="container-prose">
+      <span class="eyebrow">Planning a {location.split(',')[0]} wedding?</span>
+      <h2>Let's tell yours.</h2>
+      <p>
+        I take on a limited number of weddings each year. If you'd like to check my availability
+        for your date, I'd love to hear about your day.
+      </p>
+      <a href="/contact" class="btn">Check Availability</a>
+    </div>
+  </section>
+
+  {/* --- RELATED --- */}
+  {related.length > 0 && (
+    <section class="story-related">
+      <div class="container-wide">
+        <header class="story-related__header">
+          <span class="eyebrow">More recent weddings</span>
+        </header>
+        <div class="story-related__grid">
+          {related.map((r) => <WeddingCard entry={r} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  /* ---------- HERO ---------- */
+  .story-hero {
+    position: relative;
+    min-height: 85vh;
+    min-height: 85svh;
+    display: flex;
+    align-items: flex-end;
+    color: var(--color-paper);
+    overflow: hidden;
+  }
+  .story-hero__media { position: absolute; inset: 0; z-index: 0; }
+  .story-hero__img { width: 100%; height: 100%; object-fit: cover; }
+  .story-hero__scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(20,18,16,0.55) 0%, rgba(20,18,16,0.2) 40%, rgba(20,18,16,0.7) 100%);
+  }
+  .story-hero__content {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 5rem;
+    padding-top: 10rem;
+  }
+  .story-hero__meta {
+    color: var(--color-accent-soft);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 0.45rem 0.9rem;
+    display: inline-block;
+  }
+  .story-hero__title {
+    color: var(--color-paper);
+    font-size: clamp(3rem, 9vw, 6.5rem);
+    margin: 1.5rem 0 1.25rem;
+    font-style: italic;
+  }
+  .story-hero__summary {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.5;
+    color: rgba(250,247,242,0.92);
+    max-width: 40rem;
+  }
+
+  /* ---------- PROSE ---------- */
+  .story-prose { padding: 6rem 0 3rem; }
+  .prose :global(h2) {
+    font-size: clamp(1.35rem, 1.5vw + 1rem, 1.8rem);
+    margin: 2.5rem 0 1rem;
+    color: var(--color-ink);
+  }
+  .prose :global(p) {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--color-ink-soft);
+    margin-bottom: 1.4rem;
+  }
+  .prose :global(blockquote) {
+    margin: 2.5rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 2px solid var(--color-accent);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.35rem;
+    line-height: 1.4;
+    color: var(--color-ink);
+  }
+  .prose :global(blockquote p) { font-size: inherit; color: inherit; margin-bottom: 0.5rem; }
+  .prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-soft);
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- GALLERY ---------- */
+  .story-gallery { padding: 3rem 0 5rem; }
+  .story-gallery__header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .story-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .story-gallery__item {
+    margin: 0;
+    overflow: hidden;
+    background: var(--color-paper-alt);
+  }
+  .story-gallery__item :global(img) {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+    transition: transform 1000ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .story-gallery__item:hover :global(img) { transform: scale(1.02); }
+  .story-gallery__item--wide { grid-column: span 2; }
+  .story-gallery__item--wide :global(img) { aspect-ratio: 16/9; }
+
+  @media (max-width: 640px) {
+    .story-gallery__grid { grid-template-columns: 1fr; }
+    .story-gallery__item--wide { grid-column: span 1; }
+  }
+
+  /* ---------- QUOTE ---------- */
+  .story-quote {
+    padding: 5rem 0;
+    border-block: 1px solid var(--color-rule);
+    background: var(--color-paper-alt);
+  }
+
+  /* ---------- VENDORS ---------- */
+  .story-vendors { padding: 5rem 0 2rem; }
+  .story-vendors h3 { margin: 0.75rem 0 2rem; font-size: 1.6rem; }
+  .story-vendors__list { margin: 0; }
+  .story-vendors__row {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .story-vendors__row dt {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .story-vendors__row dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--color-ink);
+  }
+
+  @media (max-width: 560px) {
+    .story-vendors__row { grid-template-columns: 1fr; gap: 0.25rem; }
+  }
+
+  /* ---------- STORY CTA ---------- */
+  .story-cta {
+    text-align: center;
+    padding: 5rem 0 6rem;
+  }
+  .story-cta h2 { margin: 0.75rem 0 1.5rem; }
+  .story-cta p {
+    max-width: 38rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+
+  /* ---------- RELATED ---------- */
+  .story-related { padding: 6rem 0; border-top: 1px solid var(--color-rule); }
+  .story-related__header { margin-bottom: 3rem; text-align: center; }
+  .story-related__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  @media (max-width: 820px) {
+    .story-related__grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>

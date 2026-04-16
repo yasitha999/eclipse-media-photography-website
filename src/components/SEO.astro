@@ -1,0 +1,100 @@
+---
+import { site } from '@/config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;                 // absolute or path (starts with /)
+  pathname?: string;              // override canonical (defaults to Astro.url.pathname)
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, any>[]; // additional JSON-LD blocks
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/og-default.jpg',
+  pathname = Astro.url.pathname,
+  type = 'website',
+  jsonLd = [],
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(pathname, site.url).href;
+const ogImage = image.startsWith('http') ? image : new URL(image, site.url).href;
+const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
+
+// Default site-wide LocalBusiness schema — added to every page
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${site.url}/#business`,
+  name: site.name,
+  description: `${site.owner} — ${site.tagline}.`,
+  url: site.url,
+  email: site.email,
+  image: new URL('/logo-dark.png', site.url).href,
+  priceRange: site.priceFrom,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: site.addressLocality,
+    addressRegion: site.addressRegion,
+    addressCountry: site.addressCountry,
+  },
+  areaServed: site.serviceAreas.map((a) => ({ '@type': 'City', name: a })),
+  sameAs: [site.instagram].filter(Boolean),
+};
+
+const allJsonLd = [localBusiness, ...jsonLd];
+---
+
+<!-- Primary Meta Tags -->
+<title>{fullTitle}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content={description} />
+<meta name="generator" content={Astro.generator} />
+<meta name="author" content={site.owner} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<link rel="canonical" href={canonical} />
+
+<!-- Favicons & Manifest -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+
+<!-- Theme -->
+<meta name="theme-color" content="#141210" />
+<meta name="color-scheme" content="light" />
+
+<!-- Language / region -->
+<meta http-equiv="content-language" content="en-AU" />
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content="en_AU" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={canonical} />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Preconnect for fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap"
+/>
+
+<!-- Structured data -->
+{allJsonLd.map((block) => (
+  <script type="application/ld+json" set:html={JSON.stringify(block)} />
+))}

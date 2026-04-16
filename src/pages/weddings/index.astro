@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import WeddingCard from '@/components/WeddingCard.astro';
+import { site } from '@/config/site';
+
+const weddings = (await getCollection('weddings', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.weddingDate.valueOf() - a.data.weddingDate.valueOf());
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'Weddings', item: `${site.url}/weddings` },
+  ],
+};
+---
+
+<BaseLayout
+  title="Recent Weddings"
+  description={`A selection of recent weddings photographed by ${site.owner} across Melbourne, Yarra Valley, Mornington Peninsula and beyond.`}
+  jsonLd={[breadcrumb]}
+>
+  <section class="page-head">
+    <div class="container-wide">
+      <span class="eyebrow">Portfolio</span>
+      <h1 class="page-head__title">Wedding stories<br/><em>from across Victoria.</em></h1>
+      <p class="page-head__lede">
+        {weddings.length} hand-picked celebrations — each told in full. Click any couple to read the day as it happened.
+      </p>
+    </div>
+  </section>
+
+  <section class="weddings-grid">
+    <div class="container-wide">
+      <div class="weddings-grid__grid">
+        {weddings.map((wedding, i) => (
+          <WeddingCard entry={wedding} size={i % 5 === 0 ? 'large' : 'default'} eager={i < 2} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio-cta">
+    <div class="container-prose">
+      <span class="eyebrow">Is your day next?</span>
+      <h2>I'd love to hear about it.</h2>
+      <p>
+        Every wedding begins with a short message. Tell me your date, venue, and a little about you —
+        I reply to every enquiry personally, usually within a few hours.
+      </p>
+      <a href="/contact" class="btn">Check Availability</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-head {
+    padding: 10rem 0 5rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .page-head__title {
+    margin-top: 1.25rem;
+  }
+  .page-head__title em {
+    font-style: italic;
+    color: var(--color-accent);
+  }
+  .page-head__lede {
+    max-width: 42rem;
+    margin-top: 2rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .weddings-grid { padding: 6rem 0; }
+  .weddings-grid__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 4rem 2.5rem;
+  }
+  .weddings-grid__grid > :global(a) { grid-column: span 3; }
+  .weddings-grid__grid > :global(a.wedding-card--large) { grid-column: span 6; }
+
+  @media (max-width: 900px) {
+    .weddings-grid__grid { grid-template-columns: repeat(2, 1fr); gap: 3rem 1.5rem; }
+    .weddings-grid__grid > :global(a) { grid-column: span 1; }
+    .weddings-grid__grid > :global(a.wedding-card--large) { grid-column: span 2; }
+  }
+  @media (max-width: 560px) {
+    .weddings-grid__grid { grid-template-columns: 1fr; }
+    .weddings-grid__grid > :global(a),
+    .weddings-grid__grid > :global(a.wedding-card--large) { grid-column: span 1; }
+  }
+
+  .portfolio-cta {
+    padding: 6rem 0 3rem;
+    text-align: center;
+  }
+  .portfolio-cta h2 {
+    margin: 1rem 0 1.5rem;
+  }
+  .portfolio-cta p {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+</style>

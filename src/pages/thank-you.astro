@@ -1,0 +1,120 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import WeddingCard from '@/components/WeddingCard.astro';
+import { site } from '@/config/site';
+
+import heroImage from '@/assets/home/featured-3.jpg';
+
+const weddings = (await getCollection('weddings', ({ data }) => !data.draft))
+  .filter((w) => w.data.featured)
+  .sort((a, b) => b.data.weddingDate.valueOf() - a.data.weddingDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout
+  title="Thank you"
+  description="Your enquiry has been received. I'll reply personally within a few hours."
+  noindex={true}
+>
+  <section class="ty">
+    <div class="ty__media">
+      <Image
+        src={heroImage}
+        alt=""
+        aria-hidden="true"
+        widths={[1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        quality={78}
+        format="webp"
+        class="ty__img"
+      />
+      <div class="ty__scrim"></div>
+    </div>
+    <div class="container-prose ty__content">
+      <span class="eyebrow ty__eyebrow">Enquiry received</span>
+      <h1 class="ty__title">Thank you.</h1>
+      <p class="ty__lede">
+        I've got your message and I'll be in touch within a few hours on weekdays — usually
+        much sooner. In the meantime, feel free to browse a few recent weddings below.
+      </p>
+      <p class="ty__meta">
+        If you don't hear from me within 24 hours, please check your spam folder or email me directly at
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="ty-more">
+    <div class="container-wide">
+      <header class="ty-more__header">
+        <span class="eyebrow">While you wait</span>
+        <h2>A few recent stories.</h2>
+      </header>
+      <div class="ty-more__grid">
+        {weddings.map((w) => <WeddingCard entry={w} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ty {
+    position: relative;
+    min-height: 70vh;
+    min-height: 70svh;
+    display: flex;
+    align-items: center;
+    color: var(--color-paper);
+    overflow: hidden;
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+  }
+  .ty__media { position: absolute; inset: 0; z-index: 0; }
+  .ty__img { width: 100%; height: 100%; object-fit: cover; }
+  .ty__scrim {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(20,18,16,0.7) 0%, rgba(20,18,16,0.85) 100%);
+  }
+  .ty__content { position: relative; z-index: 1; text-align: center; }
+  .ty__eyebrow {
+    color: var(--color-accent-soft);
+    border: 1px solid rgba(255,255,255,0.35);
+    padding: 0.45rem 0.9rem;
+    display: inline-block;
+  }
+  .ty__title {
+    color: var(--color-paper);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    margin: 1.5rem 0 1.5rem;
+    font-style: italic;
+  }
+  .ty__lede {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(250,247,242,0.9);
+    margin-bottom: 1.5rem;
+  }
+  .ty__meta {
+    font-size: 0.9rem;
+    color: rgba(250,247,242,0.7);
+  }
+  .ty__meta a {
+    color: var(--color-accent-soft);
+    text-decoration: underline;
+  }
+
+  .ty-more { padding: 6rem 0; }
+  .ty-more__header { text-align: center; margin-bottom: 3rem; }
+  .ty-more__header h2 { margin-top: 0.75rem; }
+  .ty-more__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  @media (max-width: 900px) {
+    .ty-more__grid { grid-template-columns: 1fr; gap: 3rem; }
+  }
+</style>
