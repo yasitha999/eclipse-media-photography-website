@@ -135,20 +135,20 @@
 
   .btn:hover { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-paper); }
 
-  .btn-ghost {
+  .btn.btn-ghost {
     background: transparent;
     color: var(--color-ink);
   }
 
-  .btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); }
+  .btn.btn-ghost:hover { background: var(--color-ink); color: var(--color-paper); }
 
-  .btn-light {
+  .btn.btn-light {
     background: var(--color-paper);
     color: var(--color-ink);
     border-color: var(--color-paper);
   }
 
-  .btn-light:hover { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-paper); }
+  .btn.btn-light:hover { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-paper); }
 
   .rule {
     display: block;
