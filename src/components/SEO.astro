@@ -55,7 +55,7 @@ const localBusiness = {
     addressCountry: site.addressCountry,
   },
   areaServed: site.serviceAreas.map((a) => ({ '@type': 'City', name: a })),
-  sameAs: [site.instagram].filter(Boolean),
+  sameAs: [site.instagram, site.facebook, site.youtube].filter(Boolean),
 };
 
 const allJsonLd = [localBusiness, ...jsonLd];

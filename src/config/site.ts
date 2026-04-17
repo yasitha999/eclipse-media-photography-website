@@ -11,6 +11,8 @@ export const site = {
   email: 'info@eclipsemedia.au',
   phone: '0489 228 444',
   instagram: 'https://www.instagram.com/eclipse.media.photography/',
+  facebook: 'https://www.facebook.com/EclipseMediaMelbourne',
+  youtube: 'https://www.youtube.com/@EclipseMediaPhotography',
   googleBusinessUrl: 'https://share.google/uOcKemqGjMp7o0Sfw',
 
   // Service area

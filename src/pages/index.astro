@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProofStrip from '@/components/ProofStrip.astro';
@@ -7,10 +7,57 @@ import WeddingCard from '@/components/WeddingCard.astro';
 import Testimonial from '@/components/Testimonial.astro';
 import { site } from '@/config/site';
 
-import heroImage from '@/assets/home/hero.jpg';
+import heroMobile from '@/assets/home/hero-mobile.jpg';
+import heroDesktop from '@/assets/home/hero-desktop.jpg';
+import testimonialMobile from '@/assets/home/testimonial-mobile.jpg';
+import testimonialDesktop from '@/assets/home/testimonial-desktop.jpg';
+import ctaMobile from '@/assets/home/cta-mobile.jpg';
+import ctaDesktop from '@/assets/home/cta-desktop.jpg';
 import featured1 from '@/assets/home/featured-1.jpg';
 import featured2 from '@/assets/home/featured-2.jpg';
 import featured3 from '@/assets/home/featured-3.jpg';
+
+// Art-directed hero: portrait for mobile, landscape for desktop
+const heroDesktopImg = await getImage({
+  src: heroDesktop,
+  widths: [1200, 1800, 2400],
+  format: 'webp',
+  quality: 80,
+});
+const heroMobileImg = await getImage({
+  src: heroMobile,
+  widths: [600, 800, 1200],
+  format: 'webp',
+  quality: 80,
+});
+
+// Testimonial band: art-directed background
+const testimonialDesktopImg = await getImage({
+  src: testimonialDesktop,
+  widths: [1200, 1800, 2400],
+  format: 'webp',
+  quality: 70,
+});
+const testimonialMobileImg = await getImage({
+  src: testimonialMobile,
+  widths: [600, 800, 1200],
+  format: 'webp',
+  quality: 70,
+});
+
+// Big CTA: art-directed background
+const ctaDesktopImg = await getImage({
+  src: ctaDesktop,
+  widths: [1200, 1800, 2400],
+  format: 'webp',
+  quality: 70,
+});
+const ctaMobileImg = await getImage({
+  src: ctaMobile,
+  widths: [600, 800, 1200],
+  format: 'webp',
+  quality: 70,
+});
 
 const weddings = (await getCollection('weddings', ({ data }) => !data.draft))
   .filter((w) => w.data.featured)
@@ -41,17 +88,24 @@ const websiteSchema = {
   {/* ---------------- HERO ---------------- */}
   <section class="hero">
     <div class="hero__media">
-      <Image
-        src={heroImage}
-        alt="Couple sharing a moment in the Yarra Valley at sunset"
-        widths={[800, 1200, 1800, 2400]}
-        sizes="100vw"
-        loading="eager"
-        fetchpriority="high"
-        quality={80}
-        format="webp"
-        class="hero__img"
-      />
+      <picture>
+        <source
+          media="(min-width: 768px)"
+          srcset={heroDesktopImg.srcSet.attribute}
+          sizes="100vw"
+        />
+        <img
+          src={heroMobileImg.src}
+          srcset={heroMobileImg.srcSet.attribute}
+          sizes="100vw"
+          alt="Bride and groom sharing a kiss at Marybrooke Manor, Melbourne wedding photography"
+          loading="eager"
+          fetchpriority="high"
+          class="hero__img"
+          width={heroMobileImg.attributes.width}
+          height={heroMobileImg.attributes.height}
+        />
+      </picture>
       <div class="hero__scrim"></div>
     </div>
 
@@ -129,17 +183,24 @@ const websiteSchema = {
   {/* ---------------- TESTIMONIAL ---------------- */}
   <section class="testimonial-band">
     <div class="testimonial-band__bg">
-      <Image
-        src={featured2}
-        alt=""
-        aria-hidden="true"
-        widths={[1200, 1800, 2400]}
-        sizes="100vw"
-        loading="lazy"
-        quality={70}
-        format="webp"
-        class="testimonial-band__img"
-      />
+      <picture>
+        <source
+          media="(min-width: 768px)"
+          srcset={testimonialDesktopImg.srcSet.attribute}
+          sizes="100vw"
+        />
+        <img
+          src={testimonialMobileImg.src}
+          srcset={testimonialMobileImg.srcSet.attribute}
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          class="testimonial-band__img"
+          width={testimonialMobileImg.attributes.width}
+          height={testimonialMobileImg.attributes.height}
+        />
+      </picture>
     </div>
     <div class="container-wide testimonial-band__content">
       <Testimonial
@@ -189,17 +250,24 @@ const websiteSchema = {
   {/* ---------------- BIG CTA ---------------- */}
   <section class="big-cta">
     <div class="big-cta__bg">
-      <Image
-        src={featured3}
-        alt=""
-        aria-hidden="true"
-        widths={[1200, 1800, 2400]}
-        sizes="100vw"
-        loading="lazy"
-        quality={70}
-        format="webp"
-        class="big-cta__img"
-      />
+      <picture>
+        <source
+          media="(min-width: 768px)"
+          srcset={ctaDesktopImg.srcSet.attribute}
+          sizes="100vw"
+        />
+        <img
+          src={ctaMobileImg.src}
+          srcset={ctaMobileImg.srcSet.attribute}
+          sizes="100vw"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          class="big-cta__img"
+          width={ctaMobileImg.attributes.width}
+          height={ctaMobileImg.attributes.height}
+        />
+      </picture>
     </div>
     <div class="container-wide big-cta__content">
       <span class="eyebrow big-cta__eyebrow">{site.availabilityMessage}</span>
