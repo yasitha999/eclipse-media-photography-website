@@ -7,7 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://eclipsemedia.au',
-  trailingSlash: 'never',
+  // Cloudflare Pages serves Astro's directory-style output at trailing-slash
+  // URLs (e.g. /weddings/), so match that in canonical URLs + internal links.
+  trailingSlash: 'always',
   integrations: [
     mdx(),
     sitemap({

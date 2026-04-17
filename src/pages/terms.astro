@@ -1,0 +1,200 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+
+const lastUpdated = '17 April 2026';
+---
+
+<BaseLayout
+  title="Terms of Use"
+  description={`The terms that govern your use of eclipsemedia.au, the ${site.name} Photography website.`}
+  pathname="/terms/"
+>
+  <article class="legal">
+    <div class="container-prose">
+      <header class="legal__header">
+        <span class="eyebrow">Terms of Use</span>
+        <h1>Terms of Use</h1>
+        <p class="legal__meta">Last updated: {lastUpdated}</p>
+      </header>
+
+      <section class="legal__section">
+        <p class="legal__lede">
+          These terms govern your use of eclipsemedia.au, the website operated by
+          {site.name} Photography. By using this site, you agree to these terms. If
+          you do not agree, please do not use the site.
+        </p>
+        <p>
+          These terms cover your use of <strong>the website</strong>. The terms
+          governing a wedding <strong>booking</strong> — retainer, cancellation,
+          delivery timelines, image usage, travel, force majeure — are set out in
+          the separate Wedding Photography Contract you receive when you're ready
+          to book.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>1. Use of the site</h2>
+        <p>You may browse, read, and share links to pages on this site. You must not:</p>
+        <ul>
+          <li>Copy, reproduce, or republish site content (including photographs) without our written permission.</li>
+          <li>Use automated tools (scrapers, bots) in a way that interferes with the site's operation.</li>
+          <li>Attempt to gain unauthorised access to any part of the site or its underlying systems.</li>
+          <li>Misrepresent yourself (for example, submitting enquiries under a false identity).</li>
+        </ul>
+      </section>
+
+      <section class="legal__section">
+        <h2>2. Intellectual property</h2>
+        <p>
+          All photographs, written content, design, and branding on this site are
+          © {site.name} Photography and are protected by Australian and international
+          copyright law.
+        </p>
+        <p>
+          Individual wedding galleries may include images subject to specific
+          licensing arrangements with the couples photographed. Those images are not
+          available for use by third parties without written permission from both
+          {site.name} Photography and the couple.
+        </p>
+        <p>
+          The {site.name} and Eclipse Media Photography names and any associated
+          logos may not be used without our written permission.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>3. Enquiries and bookings</h2>
+        <p>
+          The contact form on this site collects your details so we can reply to
+          your enquiry. Submitting an enquiry is not a booking and does not reserve
+          a date. A booking is confirmed only when a signed Wedding Photography
+          Contract is in place and the retainer has been received.
+        </p>
+        <p>
+          Until a contract is signed, any discussion of pricing, packages, dates,
+          or coverage is provisional and non-binding on either party.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>4. Accuracy of information</h2>
+        <p>
+          We take reasonable care to keep the information on this site accurate
+          and current, but we make no warranties about its completeness or fitness
+          for a particular purpose. Pricing, availability, inclusions, and package
+          details shown on the site may change without notice. The details that
+          apply to your wedding are those set out in your signed contract.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>5. Links to other sites</h2>
+        <p>
+          This site may link to third-party sites (Instagram, Google Business
+          Profile, vendors we've worked with). We're not responsible for the
+          content, privacy practices, or availability of those sites.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>6. Limitation of liability</h2>
+        <p>
+          To the extent permitted by Australian law, {site.name} Photography is not
+          liable for any loss or damage — direct or indirect — that results from
+          your use of this site or reliance on information it contains.
+        </p>
+        <p>
+          Nothing in these terms excludes, restricts, or modifies any rights you
+          have under the Australian Consumer Law that cannot lawfully be excluded.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>7. Privacy</h2>
+        <p>
+          Your personal information is handled in line with our
+          <a href="/privacy/">Privacy Policy</a>.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>8. Changes to these terms</h2>
+        <p>
+          We may update these terms from time to time. The "Last updated" date at
+          the top reflects the current version. Continued use of the site after a
+          change means you accept the updated terms.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>9. Governing law</h2>
+        <p>
+          These terms are governed by the laws of {site.addressRegion}, Australia.
+          You and {site.name} Photography submit to the non-exclusive jurisdiction
+          of the courts of Victoria for any disputes arising out of these terms.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>10. Contact</h2>
+        <p>
+          Questions about these terms: <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 8rem 0 6rem;
+  }
+  .legal__header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .legal__header h1 {
+    margin: 1rem 0 0.75rem;
+  }
+  .legal__meta {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+  }
+  .legal__lede {
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+  .legal__section {
+    margin-bottom: 2.75rem;
+  }
+  .legal__section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+  .legal__section p,
+  .legal__section li {
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .legal__section ul {
+    margin: 0.5rem 0 1.25rem;
+    padding-left: 1.25rem;
+  }
+  .legal__section li {
+    margin-bottom: 0.65rem;
+  }
+  .legal__section a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal__section a:hover {
+    color: var(--color-ink);
+  }
+  .legal__section strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+</style>

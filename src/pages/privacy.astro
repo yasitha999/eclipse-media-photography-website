@@ -1,0 +1,193 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+
+const lastUpdated = '17 April 2026';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description={`How ${site.name} Photography handles the personal information you share when you use eclipsemedia.au.`}
+  pathname="/privacy/"
+>
+  <article class="legal">
+    <div class="container-prose">
+      <header class="legal__header">
+        <span class="eyebrow">Privacy Policy</span>
+        <h1>Privacy Policy</h1>
+        <p class="legal__meta">Last updated: {lastUpdated}</p>
+      </header>
+
+      <section class="legal__section">
+        <p class="legal__lede">
+          {site.name} Photography operates eclipsemedia.au. This policy explains what
+          information we collect when you visit the site or enquire about a wedding,
+          how we use it, and the choices you have.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Information we collect</h2>
+        <ul>
+          <li>
+            <strong>Enquiry details.</strong> When you submit the contact form, we
+            collect the name, email, wedding date, venue, and message you provide.
+            Phone number is collected only if you choose to share it.
+          </li>
+          <li>
+            <strong>Usage data.</strong> We receive anonymised visit data (pages
+            viewed, referrer, country, device type) through Cloudflare Web Analytics.
+            This data does not identify you personally.
+          </li>
+          <li>
+            <strong>Cookies.</strong> We use the minimum cookies needed for the site
+            to function. We do not set advertising or retargeting cookies.
+          </li>
+        </ul>
+      </section>
+
+      <section class="legal__section">
+        <h2>How we use your information</h2>
+        <ul>
+          <li>To reply to your enquiry and discuss your wedding.</li>
+          <li>To send you information you've requested (e.g. pricing guide).</li>
+          <li>To understand how the site is used and improve it.</li>
+          <li>To meet our legal and tax record-keeping obligations.</li>
+        </ul>
+        <p>
+          <strong>We do not</strong> sell or rent your personal information, run
+          retargeting or behavioural advertising, or use Facebook Pixel or similar
+          cross-site tracking.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Who we share it with</h2>
+        <ul>
+          <li>
+            <strong>Web3Forms</strong> — handles our contact-form submissions and
+            delivers them to our inbox. See <a href="https://web3forms.com/privacy-policy" target="_blank" rel="noopener">web3forms.com/privacy-policy</a>.
+          </li>
+          <li>
+            <strong>Cloudflare</strong> — hosts this website and provides
+            privacy-friendly analytics. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">cloudflare.com/privacypolicy</a>.
+          </li>
+          <li>
+            <strong>Professional advisers.</strong> We may share information with
+            accountants or legal advisers when strictly necessary to run the business.
+            They are bound by professional confidentiality.
+          </li>
+          <li>
+            <strong>Law enforcement.</strong> We may disclose information where
+            required by Australian law or in response to valid legal requests.
+          </li>
+        </ul>
+      </section>
+
+      <section class="legal__section">
+        <h2>How long we keep it</h2>
+        <p>
+          Enquiry details are kept in our email inbox and booking records for as long
+          as reasonably necessary to serve you or comply with our legal obligations —
+          typically up to 7 years for financial records. You can ask us to delete
+          information earlier (subject to the retention we're required to keep).
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Your rights</h2>
+        <p>
+          Under the Privacy Act 1988 (Cth) and the Australian Privacy Principles,
+          you have the right to:
+        </p>
+        <ul>
+          <li>Access the personal information we hold about you.</li>
+          <li>Ask us to correct information that is inaccurate.</li>
+          <li>Ask us to delete your information (subject to legal retention).</li>
+          <li>Make a complaint to us or to the Office of the Australian Information Commissioner (OAIC).</li>
+        </ul>
+        <p>
+          To exercise any of these rights, email <a href={`mailto:${site.email}`}>{site.email}</a>.
+          We may ask you to verify your identity before acting on a request.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Children</h2>
+        <p>
+          This website is intended for adults (18+). We do not knowingly collect
+          personal information from minors. If you believe a minor has sent us
+          personal information, please contact us and we will delete it.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Changes to this policy</h2>
+        <p>
+          We may update this policy from time to time. The "Last updated" date at
+          the top reflects the current version.
+        </p>
+      </section>
+
+      <section class="legal__section">
+        <h2>Contact</h2>
+        <p>
+          Privacy questions: <a href={`mailto:${site.email}`}>{site.email}</a>.
+        </p>
+      </section>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    padding: 8rem 0 6rem;
+  }
+  .legal__header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .legal__header h1 {
+    margin: 1rem 0 0.75rem;
+  }
+  .legal__meta {
+    color: var(--color-ink-soft);
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+  }
+  .legal__lede {
+    font-size: 1.1rem;
+    line-height: 1.75;
+  }
+  .legal__section {
+    margin-bottom: 2.75rem;
+  }
+  .legal__section h2 {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+  }
+  .legal__section p,
+  .legal__section li {
+    line-height: 1.75;
+    color: var(--color-ink-soft);
+  }
+  .legal__section ul {
+    margin: 0.5rem 0 1.25rem;
+    padding-left: 1.25rem;
+  }
+  .legal__section li {
+    margin-bottom: 0.65rem;
+  }
+  .legal__section a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal__section a:hover {
+    color: var(--color-ink);
+  }
+  .legal__section strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+</style>

@@ -43,7 +43,11 @@ const year = new Date().getFullYear();
 
   <div class="site-footer__bottom container-wide">
     <p>&copy; {year} {site.name}. All images © Eclipse Media Photography.</p>
-    <p>Site crafted with care · {site.addressLocality}, {site.addressRegion}</p>
+    <ul class="site-footer__legal">
+      <li><a href="/privacy/">Privacy</a></li>
+      <li><a href="/terms/">Terms</a></li>
+    </ul>
+    <p>{site.addressLocality}, {site.addressRegion}</p>
   </div>
 </footer>
 
@@ -100,10 +104,26 @@ const year = new Date().getFullYear();
   .site-footer__bottom {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
     padding-top: 1.75rem;
     font-size: 0.78rem;
     letter-spacing: 0.04em;
     color: rgba(250, 247, 242, 0.5);
+  }
+  .site-footer__legal {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1.25rem;
+  }
+  .site-footer__legal a {
+    color: rgba(250, 247, 242, 0.6);
+    text-decoration: none;
+  }
+  .site-footer__legal a:hover {
+    color: var(--color-accent-soft);
   }
 
   @media (max-width: 900px) {
@@ -111,6 +131,6 @@ const year = new Date().getFullYear();
   }
   @media (max-width: 560px) {
     .site-footer__inner { grid-template-columns: 1fr; }
-    .site-footer__bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .site-footer__bottom { flex-direction: column; gap: 0.75rem; text-align: center; }
   }
 </style>

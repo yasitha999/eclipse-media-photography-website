@@ -29,10 +29,12 @@
 - [x] 🧑 GSC audit: Manual Actions clean ✅, Security Issues clean ✅ — no penalty to claw back
 - [x] 💻 Old WP page content extracted → `res/old-site-reference/` (About, FAQ, Privacy, Terms reference copy)
 - [x] 💻 Legit old-URL 301s in `public/_redirects` (12 URLs mapped to their new homes)
-- [x] 🧑 Old WP site on Cloudways — safe to decommission once this commit is deployed
-- [ ] 🧑 Cloudways account deactivated (stop the bill)
-- [ ] 🧑 End-to-end smoke test on `*.pages.dev` preview (every page, form submission lands, thank-you redirect works)
-- [ ] 🧑 Verify each 301 on the live domain after deploy (curl or browser: `/about/`, `/contact/`, `/investment/`, `/portfolio/`, etc.)
+- [x] 🧑 Old WP site on Cloudways — decommissioned
+- [x] 🧑 Cloudways account deactivated (stop the bill)
+- [x] 💻 Live smoke test: every page 200, 301 redirects land on correct targets, casino-spam URLs 404 as intended
+- [x] 💻 Fix trailing-slash mismatch: Astro now emits canonical `/weddings/` to match Cloudflare Pages' server-side canonical form (resolved a `/contact/` redirect loop that was live)
+- [ ] 🧑 End-to-end form submission test on live domain (submit a test enquiry, confirm it lands in inbox + `/thank-you/` displays)
+- [ ] 🧑 Verify each 301 on live domain after next deploy (browser or curl: `/investment/`, `/portfolio/`, `/faq/`, etc.)
 - [ ] 🧑 Lighthouse audit on live domain (target: Perf ≥ 95, SEO 100, A11y ≥ 95)
 
 > **Note on the old WP site**: it had been compromised and injected with
@@ -132,11 +134,11 @@
 
 ### Privacy + Terms pages (legal — required because `/contact` collects PII)
 
-- [ ] 💻 Build `/privacy` page (reference: `res/old-site-reference/privacy-policy.md`, needs domain cleanup + Australian Privacy Principles alignment)
-- [ ] 💻 Build `/terms` page (reference: `res/old-site-reference/terms-conditions.md` — old boilerplate is SaaS, not photography; needs a from-scratch rewrite covering retainer, cancellation, copyright, travel, etc.)
-- [ ] 💻 Update `public/_redirects` — swap the two TEMPORARY home-page redirects for direct mappings (`/privacy-policy/` → `/privacy`, `/terms-conditions/` → `/terms`)
-- [ ] 💻 Link both from the footer
-- [ ] 🧑 (Optional but wise) Legal review of both pages before publishing
+- [x] 💻 Build `/privacy` page — Australian Privacy Principles framing, lists actual processors (Web3Forms, Cloudflare), plain-language
+- [x] 💻 Build `/terms` page — photography-specific site Terms of Use (not a wedding-booking contract; that remains a separate signed document)
+- [x] 💻 Update `public/_redirects` — `/privacy-policy/` → `/privacy/`, `/terms-conditions/` → `/terms/` (direct, no longer home-page fallback)
+- [x] 💻 Link both from the footer bottom strip
+- [ ] 🧑 (Optional but wise) Legal review of both pages before relying on them — first draft is Claude-authored and fit for purpose, but a 30-min review by an Australian solicitor specialising in creative-services contracts would harden them
 
 ### Lead magnet (email capture for couples not ready to enquire)
 

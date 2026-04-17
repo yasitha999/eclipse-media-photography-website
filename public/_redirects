@@ -1,6 +1,10 @@
 # Cloudflare Pages redirects
 # Docs: https://developers.cloudflare.com/pages/configuration/redirects/
 # Format: <source>  <destination>  <status>
+#
+# Targets end with `/` to match the canonical trailing-slash form Cloudflare
+# Pages serves Astro output at (otherwise CF 308s non-slash URLs to slash,
+# causing redirect loops with _redirects rules).
 
 # ---------------------------------------------------------------------------
 # Legacy WordPress URLs (pre-Astro rebuild).
@@ -11,23 +15,20 @@
 # time, so we let all the spam URLs 404 (Google drops them from the index
 # naturally) and 301-redirect only the real URLs to their new homes.
 #
+# Note: /about/ and /contact/ are NOT in this list — they already serve
+# the real About / Contact pages at the same URL, so no redirect is needed.
+#
 # Reference content extracted from the legitimate pages before shutdown
 # lives in res/old-site-reference/.
 # ---------------------------------------------------------------------------
 
-/about/                     /about        301
-/blog/                      /             301
-/contact/                   /contact      301
-/faq/                       /pricing#faq  301
-/portfolio/                 /weddings     301
-/portfolio/jenny-ron/       /weddings     301
-/portfolio/lydia-lucas/     /weddings     301
-/portfolio/maria-joel/      /weddings     301
-/portfolio/tylortroy/       /weddings     301
-/investment/                /pricing      301
-
-# Privacy + Terms — temporarily redirected to home until the new
-# Astro equivalents are published (see SEO-CHECKLIST §2). Update these
-# two lines once /privacy and /terms exist.
-/privacy-policy/            /             301
-/terms-conditions/          /             301
+/blog/                      /               301
+/faq/                       /pricing/#faq   301
+/portfolio/                 /weddings/      301
+/portfolio/jenny-ron/       /weddings/      301
+/portfolio/lydia-lucas/     /weddings/      301
+/portfolio/maria-joel/      /weddings/      301
+/portfolio/tylortroy/       /weddings/      301
+/investment/                /pricing/       301
+/privacy-policy/            /privacy/       301
+/terms-conditions/          /terms/         301
