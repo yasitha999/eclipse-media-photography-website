@@ -14,7 +14,7 @@ interface Props {
 const {
   title,
   description,
-  image = '/og-default.jpg',
+  image,
   pathname = Astro.url.pathname,
   type = 'website',
   jsonLd = [],
@@ -22,7 +22,19 @@ const {
 } = Astro.props;
 
 const canonical = new URL(pathname, site.url).href;
-const ogImage = image.startsWith('http') ? image : new URL(image, site.url).href;
+
+// Compute per-page OG image URL: /og/<route>.png, falling back to og-default.jpg
+function resolveOgImage(explicitImage: string | undefined, pagePath: string): string {
+  if (explicitImage) {
+    return explicitImage.startsWith('http')
+      ? explicitImage
+      : new URL(explicitImage, site.url).href;
+  }
+  // Strip leading/trailing slashes: "/weddings/" → "weddings", "/" → "index"
+  const trimmed = pagePath.replace(/^\/|\/$/g, '') || 'index';
+  return new URL(`/og/${trimmed}.png`, site.url).href;
+}
+const ogImage = resolveOgImage(image, pathname);
 const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
 
 // Default site-wide LocalBusiness schema — added to every page
@@ -61,7 +73,8 @@ const allJsonLd = [localBusiness, ...jsonLd];
 
 <!-- Favicons & Manifest -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
 
 <!-- Theme -->
 <meta name="theme-color" content="#141210" />
@@ -85,14 +98,6 @@ const allJsonLd = [localBusiness, ...jsonLd];
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
-
-<!-- Preconnect for fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap"
-/>
 
 <!-- Structured data -->
 {allJsonLd.map((block) => (

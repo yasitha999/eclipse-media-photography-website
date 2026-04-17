@@ -33,9 +33,9 @@
 - [x] 🧑 Cloudways account deactivated (stop the bill)
 - [x] 💻 Live smoke test: every page 200, 301 redirects land on correct targets, casino-spam URLs 404 as intended
 - [x] 💻 Fix trailing-slash mismatch: Astro now emits canonical `/weddings/` to match Cloudflare Pages' server-side canonical form (resolved a `/contact/` redirect loop that was live)
-- [ ] 🧑 End-to-end form submission test on live domain (submit a test enquiry, confirm it lands in inbox + `/thank-you/` displays)
+- [x] 🧑 End-to-end form submission test on live domain (user confirmed: "contact form works like a charm")
 - [ ] 🧑 Verify each 301 on live domain after next deploy (browser or curl: `/investment/`, `/portfolio/`, `/faq/`, etc.)
-- [ ] 🧑 Lighthouse audit on live domain (target: Perf ≥ 95, SEO 100, A11y ≥ 95)
+- [x] 💻 Lighthouse audit on live domain (mobile, simulated 4G): Home 73 / Pricing 79 / Wedding 82 / Privacy 89 Perf · **SEO 100 on every page** · A11y 94–98 · **CLS 0, TBT 0 ms everywhere**. Perf gap driven by 2 fixable issues: Google Fonts render-blocking (~1 s) + Astro CSS not inlined (~0.7 s). Deferred to post-venue-pages CWV pass.
 
 > **Note on the old WP site**: it had been compromised and injected with
 > ~13,000 casino-affiliate spam URLs. We intentionally let those spam URLs
@@ -45,8 +45,7 @@
 > off. Real wedding-photography impressions should rebuild over 3–6 months.
 - [ ] 💻 Implement 301s from old WP URLs in `public/_redirects`
 - [ ] 🧑 End-to-end smoke test on `*.pages.dev` preview (every page, form submission lands, thank-you redirect works)
-- [ ] 🧑 DNS cutover: nameservers → Cloudflare, custom domain attached
-- [ ] 🧑 Lighthouse audit on live domain (target: Perf ≥ 95, SEO 100, A11y ≥ 95)
+- [x] 🧑 DNS cutover: nameservers → Cloudflare, custom domain attached (site is live at `eclipsemedia.au`)
 
 ---
 
@@ -192,8 +191,11 @@
 
 ### Core Web Vitals
 
-- [ ] 🧑 Live Lighthouse on eclipsemedia.au (mobile + desktop) after DNS cutover
-- [ ] 💻 Fix any regressions found (hero image size, CLS, font-display swap)
+- [x] 🧑 Live Lighthouse on eclipsemedia.au (mobile) — see §0 for scores
+- [ ] 💻 CWV fix pass (bundle with venue-page build):
+  - Preconnect to `fonts.gstatic.com` OR self-host via `@fontsource/*` (saves ~1 s render-block)
+  - Set `build.inlineStylesheets: 'auto'` in `astro.config.mjs` (saves ~0.7 s render-block)
+  - Tighten `sizes` on home hero `<Image>` (369 KiB image-delivery saving on mobile)
 
 ---
 

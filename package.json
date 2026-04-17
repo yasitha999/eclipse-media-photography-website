@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "node scripts/generate-static-assets.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -14,8 +15,11 @@
     "@astrojs/mdx": "^4.2.1",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.2.1",
+    "@fontsource/cormorant-garamond": "^5.2.11",
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.4",
     "astro": "^5.7.0",
+    "satori": "^0.26.0",
     "sharp": "^0.34.1",
     "tailwindcss": "^4.1.4"
   }

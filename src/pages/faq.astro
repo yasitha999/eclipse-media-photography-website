@@ -1,0 +1,229 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/config/site';
+
+const faqs = [
+  {
+    q: 'How do bookings work?',
+    a: 'A signed agreement plus a retainer secures your date. The remainder is due one month before the wedding. I take on a limited number of weddings each year, so earlier is better — many couples book 9–14 months out.',
+  },
+  {
+    q: 'How far in advance should I book?',
+    a: 'Most Melbourne couples book 10–16 months in advance, especially for popular Saturday dates in spring and autumn. If your date is sooner, still reach out — I may have availability.',
+  },
+  {
+    q: 'Can you hold my date?',
+    a: 'To be fair to all couples, I can pencil you in for 48 hours, but I cannot hold your date without a signed contract. A retainer and signed agreement are required to officially reserve the wedding date.',
+  },
+  {
+    q: 'Can we customise a package?',
+    a: 'Absolutely. Extra hours, additional locations, and engagement sessions can all be added to any collection — mention it in your enquiry and I\'ll put together a tailored quote.',
+  },
+  {
+    q: 'Do you offer video?',
+    a: 'Yes — as an add-on to any photography package. You can choose a 3–5 minute Wedding Highlights film ($950) or Complete Coverage ($1,750), which bundles the highlights film with full-length films of the ceremony, speeches, and first dance. Standalone videography isn\'t offered — the magic is in photo and video being shot together, from the same point of view.',
+  },
+  {
+    q: 'Do you travel for weddings?',
+    a: `Yes — I'm based in ${site.addressLocality} and regularly photograph across ${site.addressRegion}, interstate, and overseas. Travel within 90 minutes of Melbourne is included; beyond that I provide a simple travel quote in your initial reply.`,
+  },
+  {
+    q: 'When will we get our photos?',
+    a: 'A sneak-peek gallery lands in your inbox within 24 hours of the wedding — perfect for sharing while the day is still fresh. Your full gallery, professionally edited, is delivered within 2 weeks.',
+  },
+  {
+    q: 'How many photos will I receive?',
+    a: 'Between 400–800 fully edited, high-resolution images depending on your chosen package and the length of coverage. Every image is individually colour-graded and retouched.',
+  },
+  {
+    q: 'Is it really only you on the day?',
+    a: 'Yes. A single, consistent photographer gives the day a calmer footprint and a more unified set of images. When a second shooter is genuinely needed (very large guest counts, split getting-ready locations, same-day video), I can bring in a trusted colleague on request.',
+  },
+  {
+    q: 'My partner and I hate having our picture taken — can you help?',
+    a: 'Absolutely. I\'ll coach you on posing with a natural approach that emphasises action, laughter and candid moments. Most couples tell me the camera disappears within the first 10 minutes.',
+  },
+  {
+    q: 'When do we schedule our engagement session?',
+    a: 'Engagement sessions are typically scheduled on weekdays, for sunrise or sunset — it keeps things intimate and avoids crowds. I\'ll send through timing and location suggestions once your session is booked.',
+  },
+  {
+    q: 'What if it rains?',
+    a: 'We set aside a backup plan for questionable weather. Some of my favourite images have come from overcast or rainy days — the soft light is gorgeous. If conditions are truly unworkable for a portrait session, we\'ll reschedule.',
+  },
+  {
+    q: 'What do I wear?',
+    a: 'Something that makes you feel confident and beautiful! After booking I\'ll send you a style guide with outfit suggestions and tips on what photographs well.',
+  },
+  {
+    q: 'Are you insured?',
+    a: 'Yes. Most venues require liability insurance, and I can provide a certificate of proof if your venue requests one.',
+  },
+  {
+    q: 'What happens if an emergency arises and you can\'t be there?',
+    a: 'I have a network of trusted photographers on backup should any major emergency arise. They shoot in the same elegant and authentic style, and editing would still be handled by me to keep the look consistent.',
+  },
+  {
+    q: 'What happens if COVID (or similar) disrupts my wedding date?',
+    a: 'The retainer fee is non-refundable, but we\'ll work together as quickly as possible to find a new date that works for both of us. Flexibility and communication are key — I\'ll always do my best to make it work.',
+  },
+];
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: site.url },
+    { '@type': 'ListItem', position: 2, name: 'FAQs', item: `${site.url}/faq` },
+  ],
+};
+---
+
+<BaseLayout
+  title="FAQs"
+  description={`Frequently asked questions about ${site.name} wedding photography in Melbourne. Coverage, bookings, travel, turnaround times, and everything else couples want to know.`}
+  pathname="/faq/"
+  jsonLd={[faqSchema, breadcrumb]}
+>
+  {/* ---------- HEADER ---------- */}
+  <section class="faq-hero">
+    <div class="container-prose faq-hero__content">
+      <span class="eyebrow">FAQs</span>
+      <h1 class="faq-hero__title">Everything you need to know.</h1>
+      <p class="faq-hero__lede">
+        From bookings and timelines to what happens if it rains — the answers couples ask most,
+        all in one place. If your question isn't here, <a href="/contact/">get in touch</a> and I'll reply personally.
+      </p>
+    </div>
+  </section>
+
+  {/* ---------- FAQ LIST ---------- */}
+  <section class="faq-list">
+    <div class="container-prose">
+      {faqs.map((f) => (
+        <details class="faq-list__item">
+          <summary>
+            <span>{f.q}</span>
+            <span class="faq-list__icon" aria-hidden="true">+</span>
+          </summary>
+          <div class="faq-list__body">
+            <p>{f.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  {/* ---------- CTA ---------- */}
+  <section class="faq-cta">
+    <div class="container-prose">
+      <span class="eyebrow">{site.availabilityMessage}</span>
+      <h2>Still have questions?</h2>
+      <p>
+        Every enquiry gets a personal reply — usually within a few hours on weekdays — with my full
+        pricing guide and current availability.
+      </p>
+      <a href="/contact/" class="btn">Send an Enquiry</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- HERO ---------- */
+  .faq-hero {
+    padding-block: 10rem 5rem;
+    text-align: center;
+  }
+  .faq-hero__title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin: 1.25rem 0 1.5rem;
+    line-height: 1.08;
+  }
+  .faq-hero__lede {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+    max-width: 38rem;
+    margin: 0 auto;
+  }
+  .faq-hero__lede a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .faq-hero__lede a:hover {
+    color: var(--color-ink);
+  }
+
+  /* ---------- FAQ LIST ---------- */
+  .faq-list {
+    padding-block: 2rem 5rem;
+  }
+  .faq-list__item {
+    border-bottom: 1px solid var(--color-rule);
+    padding: 1.5rem 0;
+  }
+  .faq-list__item:first-child {
+    border-top: 1px solid var(--color-rule);
+  }
+  .faq-list__item summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    line-height: 1.3;
+    color: var(--color-ink);
+    list-style: none;
+  }
+  .faq-list__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-list__icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--color-muted);
+    text-align: center;
+    transition: transform 240ms ease;
+  }
+  .faq-list__item[open] .faq-list__icon {
+    transform: rotate(45deg);
+    color: var(--color-accent);
+  }
+  .faq-list__body {
+    padding-top: 1rem;
+    color: var(--color-ink-soft);
+    line-height: 1.7;
+  }
+
+  /* ---------- CTA ---------- */
+  .faq-cta {
+    padding: 6rem 0 8rem;
+    text-align: center;
+    border-top: 1px solid var(--color-rule);
+  }
+  .faq-cta h2 {
+    margin: 1rem 0 1.5rem;
+  }
+  .faq-cta p {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+    color: var(--color-ink-soft);
+  }
+</style>
