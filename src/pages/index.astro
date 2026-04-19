@@ -232,16 +232,16 @@ const websiteSchema = {
         <h2>Simple, transparent, unhurried.</h2>
         <ol class="split__steps">
           <li>
-            <strong>Reach out.</strong> Tell me a little about your day and I'll respond within a few hours with availability and a full pricing guide.
+            <p><strong>Reach out.</strong> Tell me a little about your day and I'll respond within a few hours with availability and a full pricing guide.</p>
           </li>
           <li>
-            <strong>Let's meet.</strong> A 15-minute call or coffee — no pressure, no hard sell. Just a chance to see if we click.
+            <p><strong>Let's meet.</strong> A 15-minute call or coffee, no pressure. Just a chance to see if we click.</p>
           </li>
           <li>
-            <strong>Book your date.</strong> A small deposit secures the day. From there, I'm in your corner until final delivery.
+            <p><strong>Book your date.</strong> A small deposit secures the day. From there, I'm in your corner until final delivery.</p>
           </li>
           <li>
-            <strong>Tell your story.</strong> Expect your full gallery in 6–8 weeks, along with a hand-picked highlight reel you'll actually want to share.
+            <p><strong>Tell your story.</strong> Expect your full gallery in 6–8 weeks, along with a hand-picked highlight reel you'll actually want to share.</p>
           </li>
         </ol>
         <a href="/contact" class="btn">Start the Conversation</a>
@@ -511,6 +511,10 @@ const websiteSchema = {
   .split__steps strong {
     font-weight: 500;
     color: var(--color-ink);
+  }
+  .split__steps p {
+    margin: 0;
+    flex: 1;
   }
 
   @media (max-width: 820px) {
