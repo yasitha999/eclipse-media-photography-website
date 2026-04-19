@@ -28,6 +28,9 @@ const weddings = defineCollection({
         })
       ),
 
+      // Optional YouTube video embed (shown above gallery when present)
+      videoUrl: z.string().url().optional(),
+
       // Meta
       summary: z.string(),                   // 1-2 sentences, used in cards + OG
       featured: z.boolean().default(false),

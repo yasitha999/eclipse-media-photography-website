@@ -28,7 +28,15 @@ const {
   summary,
   vendors,
   testimonial,
+  videoUrl,
 } = wedding.data;
+
+function youtubeId(url: string | undefined): string | null {
+  if (!url) return null;
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+const ytId = youtubeId(videoUrl);
 
 const formattedDate = weddingDate.toLocaleDateString('en-AU', {
   day: 'numeric',
@@ -96,16 +104,24 @@ const breadcrumb = {
     </div>
   </section>
 
-  {/* --- INTRO STORY --- */}
-  <section class="story-prose">
-    <div class="container-prose">
-      <article class="prose">
-        <Content />
-      </article>
-    </div>
-  </section>
+  {/* --- VIDEO (optional) --- */}
+  {ytId && (
+    <section class="story-video">
+      <div class="container-wide">
+        <div class="story-video__frame">
+          <iframe
+            src={`https://www.youtube.com/embed/${ytId}?rel=0`}
+            title={`${coupleNames} — wedding film`}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+        </div>
+      </div>
+    </section>
+  )}
 
-  {/* --- GALLERY --- */}
+  {/* --- GALLERY (masonry, aspect-ratio preserved) --- */}
   <section class="story-gallery">
     <div class="container-wide">
       <header class="story-gallery__header">
@@ -113,13 +129,13 @@ const breadcrumb = {
         <span class="eyebrow">The day in photographs</span>
       </header>
       <div class="story-gallery__grid">
-        {gallery.map((img, i) => (
-          <figure class:list={['story-gallery__item', i % 4 === 0 && 'story-gallery__item--wide']}>
+        {gallery.map((img) => (
+          <figure class="story-gallery__item">
             <Image
               src={img.src}
               alt={img.alt}
               widths={[600, 900, 1200, 1600]}
-              sizes="(min-width: 1100px) 48vw, (min-width: 700px) 48vw, 92vw"
+              sizes="(min-width: 1100px) 32vw, (min-width: 700px) 48vw, 92vw"
               loading="lazy"
               quality={78}
               format="webp"
@@ -127,6 +143,15 @@ const breadcrumb = {
           </figure>
         ))}
       </div>
+    </div>
+  </section>
+
+  {/* --- FULL STORY (moved to after gallery) --- */}
+  <section class="story-prose">
+    <div class="container-prose">
+      <article class="prose">
+        <Content />
+      </article>
     </div>
   </section>
 
@@ -232,8 +257,25 @@ const breadcrumb = {
     max-width: 40rem;
   }
 
+  /* ---------- VIDEO ---------- */
+  .story-video { padding: 5rem 0 1rem; }
+  .story-video__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+  }
+  .story-video__frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
   /* ---------- PROSE ---------- */
-  .story-prose { padding: 6rem 0 3rem; }
+  .story-prose { padding: 4rem 0 2rem; }
   .prose :global(h2) {
     font-size: clamp(1.35rem, 1.5vw + 1rem, 1.8rem);
     margin: 2.5rem 0 1rem;
@@ -263,8 +305,8 @@ const breadcrumb = {
     text-underline-offset: 3px;
   }
 
-  /* ---------- GALLERY ---------- */
-  .story-gallery { padding: 3rem 0 5rem; }
+  /* ---------- GALLERY (masonry via CSS columns — natural aspect ratios) ---------- */
+  .story-gallery { padding: 4rem 0 5rem; }
   .story-gallery__header {
     display: flex;
     align-items: center;
@@ -272,29 +314,29 @@ const breadcrumb = {
     margin-bottom: 3rem;
   }
   .story-gallery__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    column-count: 3;
+    column-gap: 1.25rem;
   }
   .story-gallery__item {
-    margin: 0;
+    margin: 0 0 1.25rem;
+    break-inside: avoid;
     overflow: hidden;
     background: var(--color-paper-alt);
+    display: block;
   }
   .story-gallery__item :global(img) {
     width: 100%;
-    height: 100%;
-    aspect-ratio: 3/2;
-    object-fit: cover;
+    height: auto;
+    display: block;
     transition: transform 1000ms cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .story-gallery__item:hover :global(img) { transform: scale(1.02); }
-  .story-gallery__item--wide { grid-column: span 2; }
-  .story-gallery__item--wide :global(img) { aspect-ratio: 16/9; }
 
-  @media (max-width: 640px) {
-    .story-gallery__grid { grid-template-columns: 1fr; }
-    .story-gallery__item--wide { grid-column: span 1; }
+  @media (max-width: 900px) {
+    .story-gallery__grid { column-count: 2; }
+  }
+  @media (max-width: 560px) {
+    .story-gallery__grid { column-count: 1; }
   }
 
   /* ---------- QUOTE ---------- */
