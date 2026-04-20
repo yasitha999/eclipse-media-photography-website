@@ -128,9 +128,9 @@ const breadcrumb = {
         <span class="rule"></span>
         <span class="eyebrow">The day in photographs</span>
       </header>
-      <div class="story-gallery__grid">
-        {gallery.map((img) => (
-          <figure class="story-gallery__item">
+      <div class="story-gallery__grid" id="gallery-grid">
+        {gallery.map((img, i) => (
+          <figure class="story-gallery__item" data-index={i}>
             <Image
               src={img.src}
               alt={img.alt}
@@ -198,6 +198,17 @@ const breadcrumb = {
       <a href="/contact" class="btn">Check Availability</a>
     </div>
   </section>
+
+  {/* --- LIGHTBOX --- */}
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+    <button id="lb-close" aria-label="Close">&times;</button>
+    <button id="lb-prev" aria-label="Previous">&#8592;</button>
+    <button id="lb-next" aria-label="Next">&#8594;</button>
+    <div id="lb-img-wrap">
+      <img id="lb-img" src="" alt="" />
+    </div>
+    <p id="lb-counter"></p>
+  </div>
 
   {/* --- RELATED --- */}
   {related.length > 0 && (
@@ -386,6 +397,70 @@ const breadcrumb = {
     color: var(--color-ink-soft);
   }
 
+  /* ---------- LIGHTBOX ---------- */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(10, 9, 8, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #lightbox[hidden] { display: none; }
+  #lb-img-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 4rem 5rem;
+    box-sizing: border-box;
+  }
+  #lb-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    user-select: none;
+  }
+  #lb-close, #lb-prev, #lb-next {
+    position: absolute;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    line-height: 1;
+    transition: color 160ms ease, transform 160ms ease;
+    padding: 0.5rem;
+  }
+  #lb-close:hover, #lb-prev:hover, #lb-next:hover { color: #fff; }
+  #lb-close {
+    top: 1.25rem;
+    right: 1.5rem;
+    font-size: 2.5rem;
+  }
+  #lb-prev, #lb-next {
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+  }
+  #lb-prev { left: 1.25rem; }
+  #lb-prev:hover { transform: translateY(-50%) translateX(-3px); }
+  #lb-next { right: 1.25rem; }
+  #lb-next:hover { transform: translateY(-50%) translateX(3px); }
+  #lb-counter {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.45);
+    margin: 0;
+  }
+  .story-gallery__item { cursor: zoom-in; }
+
   /* ---------- RELATED ---------- */
   .story-related { padding: 6rem 0; border-top: 1px solid var(--color-rule); }
   .story-related__header { margin-bottom: 3rem; text-align: center; }
@@ -398,3 +473,61 @@ const breadcrumb = {
     .story-related__grid { grid-template-columns: 1fr; gap: 3rem; }
   }
 </style>
+
+<script is:inline>
+(function () {
+  const grid = document.getElementById('gallery-grid');
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCounter = document.getElementById('lb-counter');
+  if (!grid || !lightbox || !lbImg) return;
+
+  const items = Array.from(grid.querySelectorAll('.story-gallery__item img'));
+  let current = 0;
+
+  function show(index) {
+    current = (index + items.length) % items.length;
+    const src = items[current].getAttribute('src');
+    const alt = items[current].getAttribute('alt');
+    lbImg.setAttribute('src', src);
+    lbImg.setAttribute('alt', alt || '');
+    lbCounter.textContent = (current + 1) + ' / ' + items.length;
+    lightbox.removeAttribute('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.setAttribute('hidden', '');
+    document.body.style.overflow = '';
+  }
+
+  grid.addEventListener('click', function (e) {
+    const figure = e.target.closest('.story-gallery__item');
+    if (!figure) return;
+    show(parseInt(figure.dataset.index, 10));
+  });
+
+  document.getElementById('lb-close').addEventListener('click', close);
+  document.getElementById('lb-prev').addEventListener('click', function () { show(current - 1); });
+  document.getElementById('lb-next').addEventListener('click', function () { show(current + 1); });
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox || e.target.id === 'lb-img-wrap') close();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (lightbox.hasAttribute('hidden')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+
+  // Touch swipe
+  let touchStartX = 0;
+  lightbox.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', function (e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) show(dx < 0 ? current + 1 : current - 1);
+  });
+}());
+</script>
