@@ -10,7 +10,7 @@ interface Props {
 
 const { entry, size = 'default', eager = false } = Astro.props;
 const { coupleNames, venue, location, heroImage, heroImagePortrait, heroAlt, weddingDate } = entry.data;
-const cardImage = heroImagePortrait ?? heroImage;
+const cardImage = size === 'large' ? heroImage : (heroImagePortrait ?? heroImage);
 const year = weddingDate.getFullYear();
 const href = `/weddings/${entry.id}`;
 ---
