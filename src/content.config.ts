@@ -19,6 +19,7 @@ const weddings = defineCollection({
 
       // Media
       heroImage: image(),
+      heroImagePortrait: image().optional(),
       heroAlt: z.string(),
       gallery: z.array(
         z.object({

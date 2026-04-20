@@ -9,7 +9,8 @@ interface Props {
 }
 
 const { entry, size = 'default', eager = false } = Astro.props;
-const { coupleNames, venue, location, heroImage, heroAlt, weddingDate } = entry.data;
+const { coupleNames, venue, location, heroImage, heroImagePortrait, heroAlt, weddingDate } = entry.data;
+const cardImage = heroImagePortrait ?? heroImage;
 const year = weddingDate.getFullYear();
 const href = `/weddings/${entry.id}`;
 ---
@@ -17,7 +18,7 @@ const href = `/weddings/${entry.id}`;
 <a href={href} class:list={['wedding-card', `wedding-card--${size}`]} aria-label={`${coupleNames} — ${venue}`}>
   <div class="wedding-card__media">
     <Image
-      src={heroImage}
+      src={cardImage}
       alt={heroAlt}
       widths={size === 'large' ? [800, 1200, 1800] : [600, 900, 1200]}
       sizes={size === 'large' ? '(min-width: 900px) 66vw, 100vw' : '(min-width: 900px) 33vw, 100vw'}
